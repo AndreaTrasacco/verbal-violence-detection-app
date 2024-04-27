@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "it.unipi.masss.project.app-mergeDebugResources-47:/layout/fragment_recordings.xml",
+        "source": "it.unipi.masss.project.app-main-50:/layout/fragment_recordings.xml"
+    },
+    {
+        "merged": "it.unipi.masss.project.app-mergeDebugResources-47:/layout/fragment_home.xml",
+        "source": "it.unipi.masss.project.app-main-50:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "it.unipi.masss.project.app-mergeDebugResources-47:/layout/activity_main.xml",
+        "source": "it.unipi.masss.project.app-main-50:/layout/activity_main.xml"
+    },
+    {
+        "merged": "it.unipi.masss.project.app-mergeDebugResources-47:/layout/fragment_settings.xml",
+        "source": "it.unipi.masss.project.app-main-50:/layout/fragment_settings.xml"
+    }
+]
