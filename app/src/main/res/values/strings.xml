@@ -18,4 +18,6 @@
 
     <string name="welcome_msg">This app needs to access the user location to work, please grant the permission and select "always allow"</string>
     <string name="close_app">Close app</string>
+    <string name="sos">SOS</string>
+    <string name="sends_manual_sos">Sends manual SOS</string>
 </resources>

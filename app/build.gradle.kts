@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "it.unipi.masss.project"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "it.unipi.masss.project"
         minSdk = 29
         targetSdk = 33
         versionCode = 1

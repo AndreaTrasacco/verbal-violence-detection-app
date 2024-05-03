@@ -14,8 +14,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.example.myapplication.R
-import com.example.myapplication.databinding.FragmentSettingsBinding
+import it.unipi.masss.project.R
+import it.unipi.masss.project.databinding.FragmentSettingsBinding
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.ContactsContract
@@ -64,14 +64,7 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-        val hasPermission = ContextCompat.checkSelfPermission(
-            requireActivity(),
-            Manifest.permission.READ_CONTACTS
-        )== PackageManager.PERMISSION_GRANTED
 
-        if (!hasPermission) {
-            requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
-        }
 
         val sharedPreferences = requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
         val allEntries = sharedPreferences.all
@@ -129,6 +122,15 @@ class SettingsFragment : Fragment() {
         // Set click listener for submit button
         submitButton.setOnClickListener {
             // Open the contact picker
+            val hasPermission = ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.READ_CONTACTS
+            )== PackageManager.PERMISSION_GRANTED
+
+            if (!hasPermission) {
+                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            }
+
             val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
             contactPickerLauncher.launch(intent)
         }
