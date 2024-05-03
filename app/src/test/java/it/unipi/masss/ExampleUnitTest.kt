@@ -1,4 +1,4 @@
-package com.example.myapplication
+package it.unipi.masss
 
 import org.junit.Test
 

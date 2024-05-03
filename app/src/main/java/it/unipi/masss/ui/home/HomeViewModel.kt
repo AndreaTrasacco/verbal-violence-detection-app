@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.home
+package it.unipi.masss.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

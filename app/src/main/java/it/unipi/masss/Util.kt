@@ -1,4 +1,4 @@
-package com.example.myapplication
+package it.unipi.masss
 
 object Util {
     const val BG_NOTIF_ID = 69

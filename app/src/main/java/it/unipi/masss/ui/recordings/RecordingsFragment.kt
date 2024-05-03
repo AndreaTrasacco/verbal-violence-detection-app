@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.recordings
+package it.unipi.masss.ui.recordings
 
 import android.os.Bundle
 import android.view.LayoutInflater

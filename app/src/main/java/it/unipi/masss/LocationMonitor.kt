@@ -1,4 +1,4 @@
-package com.example.myapplication
+package it.unipi.masss
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import android.provider.Settings
+import com.example.myapplication.R
 
 const val DELAY_MS: Long = 1000
 

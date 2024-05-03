@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.myapplication.ui.home.HomeFragment"
+        android:name="it.unipi.masss.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_recordings"
-        android:name="com.example.myapplication.ui.recordings.RecordingsFragment"
+        android:name="it.unipi.masss.ui.recordings.RecordingsFragment"
         android:label="@string/title_recordings"
         tools:layout="@layout/fragment_recordings" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.myapplication.ui.settings.SettingsFragment"
+        android:name="it.unipi.masss.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

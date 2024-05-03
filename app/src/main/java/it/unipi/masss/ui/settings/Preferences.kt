@@ -1,4 +1,4 @@
-package it.unipi.masss.project.ui.settings
+package it.unipi.masss.ui.settings
 
 import android.content.Context
 import android.content.SharedPreferences
