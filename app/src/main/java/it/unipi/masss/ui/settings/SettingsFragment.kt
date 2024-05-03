@@ -104,8 +104,6 @@ class SettingsFragment : Fragment() {
                             val name = it.getString(nameIndex)
                             val number = it.getString(numberIndex)
 
-                            createContactTextView(id, name, number, requireContext(), contactListLayout, scrollViewLayout)
-
                             // Concatenate the name and number into a single string
                             val contactInfo = "$name,$number"
 
@@ -113,6 +111,7 @@ class SettingsFragment : Fragment() {
                             val existingContactInfo = sharedPreferences.getString("contact_info_$id", null)
 
                             if (existingContactInfo != contactInfo) {
+                                createContactTextView(id, name, number, requireContext(), contactListLayout, scrollViewLayout)
                                 val editor = sharedPreferences.edit()
                                 editor.putString("contact_info_$id", contactInfo)
                                 editor.apply()

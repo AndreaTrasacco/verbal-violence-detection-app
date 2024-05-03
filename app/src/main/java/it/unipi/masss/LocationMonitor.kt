@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import android.provider.Settings
 import com.example.myapplication.R
+import java.util.concurrent.CompletableFuture
 
 const val DELAY_MS: Long = 1000
 
@@ -118,6 +119,34 @@ class LocationMonitor : Service() {
             .setContentTitle(Util.APP_NAME)
             .setContentIntent(pendingIntent)
             .build()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getPreciseLocation(): Location? {
+        val futureLocation = CompletableFuture<Location>()
+        val fusLocClient = LocationServices.getFusedLocationProviderClient(this)
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1)
+            .setWaitForAccurateLocation(true)
+            .setMinUpdateIntervalMillis(1)
+            .setMaxUpdateDelayMillis(1)
+            .setMaxUpdates(1)
+            .build()
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                val currentLoc = locationResult.lastLocation
+                if(currentLoc != null) {
+                    Log.d("PRECISE_LOC", currentLoc.toString())
+                    fusedLocationClient.removeLocationUpdates(this)
+                    futureLocation.complete(currentLoc)
+                    return;
+                }
+
+            }
+        }
+
+        fusLocClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        return futureLocation.get()
     }
 
 }
