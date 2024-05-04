@@ -15,6 +15,7 @@ import it.unipi.masss.LocationMonitor
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
+import it.unipi.masss.recordingservice.RecordingService
 
 
 class HomeFragment : Fragment() {
@@ -46,29 +47,52 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val start_mon_btn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
+        if(requireContext().isServiceRunning(RecordingService::class.java)){ // TODO TO BE CORRECTED
+            val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
+            start_mon_btn.backgroundTintList = colorStateList
+        } else {
+            val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
+            start_mon_btn.backgroundTintList = colorStateList
+        }
 
         start_mon_btn.setOnClickListener {
 
-            // detect if the service is already running
-            var isActive = requireContext().isServiceRunning(LocationMonitor::class.java)
+            // detect if the services are already running
+            var isActiveLocation = requireContext().isServiceRunning(LocationMonitor::class.java)
+            var isActiveRecording = requireContext().isServiceRunning(RecordingService::class.java)
 
-            if (!isActive) {
+            if (!isActiveRecording) {
+                // Start Recording service
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = RecordingService.Action.START.toString()
+                    context?.applicationContext?.startService(it)
+                }
+                /*
+                TODO: PER FRACESCO, LocationMonitor non deve essere avviato tramite il bottone (?)
                 // start background monitoring service
                 val intent = Intent(context, LocationMonitor::class.java)
-                context?.startService(intent)
+                context?.startService(intent)*/
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
                 start_mon_btn.backgroundTintList = colorStateList
             }
             else {
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = RecordingService.Action.STOP.toString()
+                    context?.applicationContext?.startService(it)
+                }
+                /*
+                TODO: PER FRACESCO, LocationMonitor non deve essere interrotto tramite il bottone (?)
                 // stop background monitoring service
                 val intent = Intent(context, LocationMonitor::class.java)
-                context?.stopService(intent)
+                context?.stopService(intent)*/
+
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
                 start_mon_btn.backgroundTintList = colorStateList
             }
+
         }
     }
 

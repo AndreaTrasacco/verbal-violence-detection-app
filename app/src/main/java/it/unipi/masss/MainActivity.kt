@@ -2,7 +2,9 @@ package it.unipi.masss
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -37,12 +39,22 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
     }
 
     override fun onStart() {
         super.onStart()
         checkLocationPermissions()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // TODO
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    // Manifest.permission.POST_NOTIFICATIONS,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.FOREGROUND_SERVICE_MICROPHONE
+                ),
+                0
+            )
+        }
     }
 
     /**check if fine and background location permissions are granted, ask to grant them if they are not*/

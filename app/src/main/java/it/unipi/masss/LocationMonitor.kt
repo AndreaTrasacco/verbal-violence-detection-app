@@ -89,7 +89,7 @@ class LocationMonitor : Service() {
     // foreground service
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        createNotifChannel()
+        createNotification()
         startForeground(Util.BG_NOTIF_ID, notif)
         return START_NOT_STICKY;
     }
@@ -101,12 +101,7 @@ class LocationMonitor : Service() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun createNotifChannel() {
-        // create notification channel
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(Util.CHANNEL_ID, Util.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(channel)
-
+    private fun createNotification() {
         // create notification for when the service is started
         // use an intent to reopen the app if the notification is tapped
         val intent = Intent(this, MainActivity::class.java).apply {
