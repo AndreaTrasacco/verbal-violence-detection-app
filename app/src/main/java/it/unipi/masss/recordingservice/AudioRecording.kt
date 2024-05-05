@@ -4,6 +4,7 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.log10
+
 
 class AudioRecording(private val recordingService: RecordingService) {
     private val timer: Timer = Timer()
@@ -77,9 +79,13 @@ class AudioRecording(private val recordingService: RecordingService) {
                                     reset()
                                 }
                                 // TODO CALL ML model with $outputFile, Get result
-                                val violentRecording = true
+                                val violentRecording = false
                                 if (violentRecording) // TODO Is there the need of copying the audio?
                                     recordingService.stopRecording(true)
+                                else{
+                                    val fdelete = File(outputFile)
+                                    fdelete.delete()
+                                }
                             }, RECORDING_FOR_ML_SECONDS, TimeUnit.SECONDS
                         )
                     }
