@@ -26,6 +26,11 @@ class RecordingService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    override fun onDestroy() {
+        AudioModelManager.destroyModel()
+        super.onDestroy()
+    }
+
     private fun startRecording() {
         // Create PendingIntent for starting MainActivity when notification is clicked
         val resultIntent = Intent(this, MainActivity::class.java)

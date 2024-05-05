@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.log10
 
-
 class AudioRecording(private val recordingService: RecordingService) {
     private val timer: Timer = Timer()
     private val recorderTask: RecorderTask? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -64,11 +63,11 @@ class AudioRecording(private val recordingService: RecordingService) {
                     mediaRecorder?.apply {
                         stop()
                         amplitude = getAmplitudeDB(this)
-                        Log.d("RecordingTask", "Detected amplitude: $amplitude dB")
+                        Log.d("RECORDER TASK", "Detected amplitude: $amplitude dB")
                         reset()
                     }
                     if (amplitude > AMPLITUDE_THRESHOLD) {
-                        Log.d("RecordingTask", "Start recording for subsequent detection")
+                        Log.d("RECORDER TASK", "Start recording for subsequent detection")
                         val outputFile =
                             recordingService.filesDir.absolutePath + "/recording" + getTimestamp() + ".wav"
                         startMediaRecorder(outputFile)
@@ -78,8 +77,16 @@ class AudioRecording(private val recordingService: RecordingService) {
                                     stop()
                                     reset()
                                 }
-                                // TODO CALL ML model with $outputFile, Get result
-                                val violentRecording = false
+                                Log.d(
+                                    "RECORDER TASK",
+                                    "Before classify"
+                                )
+                                val violentRecording = AudioModelManager.classify(recordingService,
+                                    outputFile)
+                                Log.d(
+                                    "RECORDER TASK",
+                                    "classification result: " + violentRecording.toString()
+                                )
                                 if (violentRecording) // TODO Is there the need of copying the audio?
                                     recordingService.stopRecording(true)
                                 else{
