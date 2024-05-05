@@ -7,11 +7,16 @@ import android.content.Context
 import android.os.Build
 
 class ProtectronApplication : Application() {
+    companion object NotificationInfo {
+        const val BG_NOTIF_ID = 69
+        const val CHANNEL_ID = "PROTECTRON"
+        const val CHANNEL_NAME = "Nearby danger finder"
+    }
     override fun onCreate() {
         super.onCreate()
         val channel = NotificationChannel(
-            Util.CHANNEL_ID,
-            Util.CHANNEL_NAME,
+            CHANNEL_ID,
+            CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         )
         val notificationManager =

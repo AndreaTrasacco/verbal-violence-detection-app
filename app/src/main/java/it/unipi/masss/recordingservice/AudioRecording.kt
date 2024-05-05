@@ -62,11 +62,11 @@ class AudioRecording(private val recordingService: RecordingService) {
                     mediaRecorder?.apply {
                         stop()
                         amplitude = getAmplitudeDB(this)
-                        Log.d("RECORDER TASK", "Detected amplitude: $amplitude dB")
+                        Log.d("RecordingTask", "Detected amplitude: $amplitude dB")
                         reset()
                     }
                     if (amplitude > AMPLITUDE_THRESHOLD) {
-                        Log.d("RECORDER TASK", "Start recording for subsequent detection")
+                        Log.d("RecordingTask", "Start recording for subsequent detection")
                         val outputFile =
                             recordingService.filesDir.absolutePath + "/recording" + getTimestamp() + ".wav"
                         startMediaRecorder(outputFile)
