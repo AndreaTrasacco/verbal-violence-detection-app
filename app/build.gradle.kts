@@ -53,7 +53,8 @@ android {
 
 chaquopy {
     defaultConfig {
-        buildPython("C:/Users/nicol/miniconda3/envs/masss/python.exe")
+        //C:/Users/nicol/miniconda3/envs/masss/python.exe
+        buildPython("C:\\Users\\kille\\AppData\\Local\\Programs\\Python\\Python311\\python.exe")
         version = "3.8"
         pip{
             install("numpy")

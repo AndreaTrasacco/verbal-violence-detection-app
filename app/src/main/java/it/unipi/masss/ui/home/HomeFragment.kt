@@ -1,7 +1,5 @@
 package it.unipi.masss.ui.home
 
-import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -17,6 +15,7 @@ import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
 import it.unipi.masss.recordingservice.RecordingService
+import it.unipi.masss.Util.isServiceRunning
 
 
 class HomeFragment : Fragment() {
@@ -38,13 +37,6 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    @Suppress("DEPRECATION")
-    fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
-        return (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
-            .getRunningServices(Integer.MAX_VALUE)
-            .any { it -> it.service.className == service.name }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val start_mon_btn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
@@ -61,7 +53,6 @@ class HomeFragment : Fragment() {
         start_mon_btn.setOnClickListener {
 
             // detect if the services are already running
-            var isActiveLocation = requireContext().isServiceRunning(LocationMonitor::class.java)
             var isActiveRecording = requireContext().isServiceRunning(RecordingService::class.java)
 
             if (!isActiveRecording) {
@@ -70,11 +61,6 @@ class HomeFragment : Fragment() {
                     it.action = RecordingService.Action.START.toString()
                     context?.applicationContext?.startService(it)
                 }
-                /*
-                TODO: PER FRACESCO, LocationMonitor non deve essere avviato tramite il bottone (?)
-                // start background monitoring service
-                val intent = Intent(context, LocationMonitor::class.java)
-                context?.startService(intent)*/
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
@@ -84,11 +70,6 @@ class HomeFragment : Fragment() {
                     it.action = RecordingService.Action.STOP.toString()
                     context?.applicationContext?.startService(it)
                 }
-                /*
-                TODO: PER FRACESCO, LocationMonitor non deve essere interrotto tramite il bottone (?)
-                // stop background monitoring service
-                val intent = Intent(context, LocationMonitor::class.java)
-                context?.stopService(intent)*/
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))

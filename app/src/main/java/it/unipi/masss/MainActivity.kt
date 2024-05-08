@@ -1,9 +1,13 @@
 package it.unipi.masss
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,6 +19,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import it.unipi.masss.databinding.ActivityMainBinding
+import it.unipi.masss.Util.isServiceRunning
+import it.unipi.masss.recordingservice.RecordingService
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +44,12 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // start location monitor if not already started
+        if (!(this.isServiceRunning(LocationMonitor::class.java))) {
+            val intent = Intent(this, LocationMonitor::class.java)
+            this.startService(intent)
+        }
     }
 
     override fun onStart() {
