@@ -22,7 +22,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import android.provider.Settings
-import com.example.myapplication.R
 import java.util.concurrent.CompletableFuture
 
 const val DELAY_MS: Long = 1000
@@ -89,8 +88,8 @@ class LocationMonitor : Service() {
     // foreground service
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        createNotifChannel()
-        startForeground(Util.BG_NOTIF_ID, notif)
+        createNotification()
+        startForeground(ProtectronApplication.BG_NOTIF_ID, notif)
         return START_NOT_STICKY;
     }
 
@@ -101,12 +100,7 @@ class LocationMonitor : Service() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun createNotifChannel() {
-        // create notification channel
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(Util.CHANNEL_ID, Util.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(channel)
-
+    private fun createNotification() {
         // create notification for when the service is started
         // use an intent to reopen the app if the notification is tapped
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -114,9 +108,9 @@ class LocationMonitor : Service() {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_IMMUTABLE)
-        notif = NotificationCompat.Builder(this, Util.CHANNEL_ID)
+        notif = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(Util.APP_NAME)
+            .setContentTitle(resources.getString(R.string.app_name))
             .setContentIntent(pendingIntent)
             .build()
     }

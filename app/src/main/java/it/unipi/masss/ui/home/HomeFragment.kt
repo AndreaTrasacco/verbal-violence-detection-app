@@ -6,15 +6,17 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import it.unipi.masss.LocationMonitor
-import com.example.myapplication.R
-import com.example.myapplication.databinding.FragmentHomeBinding
+import it.unipi.masss.R
+import it.unipi.masss.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
+import it.unipi.masss.recordingservice.RecordingService
 
 
 class HomeFragment : Fragment() {
@@ -46,29 +48,53 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val start_mon_btn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
+        if (requireContext().isServiceRunning(RecordingService::class.java)) {
+            Log.d("HomeFragment", "Recording service is active")
+            val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
+            start_mon_btn.backgroundTintList = colorStateList
+        } else {
+            Log.d("HomeFragment", "Recording service is not active")
+            val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
+            start_mon_btn.backgroundTintList = colorStateList
+        }
 
         start_mon_btn.setOnClickListener {
 
-            // detect if the service is already running
-            var isActive = requireContext().isServiceRunning(LocationMonitor::class.java)
+            // detect if the services are already running
+            var isActiveLocation = requireContext().isServiceRunning(LocationMonitor::class.java)
+            var isActiveRecording = requireContext().isServiceRunning(RecordingService::class.java)
 
-            if (!isActive) {
+            if (!isActiveRecording) {
+                // Start Recording service
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = RecordingService.Action.START.toString()
+                    context?.applicationContext?.startService(it)
+                }
+                /*
+                TODO: PER FRACESCO, LocationMonitor non deve essere avviato tramite il bottone (?)
                 // start background monitoring service
                 val intent = Intent(context, LocationMonitor::class.java)
-                context?.startService(intent)
+                context?.startService(intent)*/
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
                 start_mon_btn.backgroundTintList = colorStateList
-            }
-            else {
+            } else {
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = RecordingService.Action.STOP.toString()
+                    context?.applicationContext?.startService(it)
+                }
+                /*
+                TODO: PER FRACESCO, LocationMonitor non deve essere interrotto tramite il bottone (?)
                 // stop background monitoring service
                 val intent = Intent(context, LocationMonitor::class.java)
-                context?.stopService(intent)
+                context?.stopService(intent)*/
+
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
                 start_mon_btn.backgroundTintList = colorStateList
             }
+
         }
     }
 
@@ -76,12 +102,12 @@ class HomeFragment : Fragment() {
         super.onResume()
         val start_mon_btn = requireView().findViewById<MaterialButton>(R.id.start_mon_btn)
 
-        var isActive = requireContext().isServiceRunning(LocationMonitor::class.java)
-        if(!isActive) {
+        //var isActive = requireContext().isServiceRunning(LocationMonitor::class.java) // TODO PER FRANCESCO: Location non decide colore bottone (?)
+        var isRecordingActive = requireContext().isServiceRunning(RecordingService::class.java)
+        if (!isRecordingActive) {
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
             start_mon_btn.backgroundTintList = colorStateList
-        }
-        else {
+        } else {
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
             start_mon_btn.backgroundTintList = colorStateList
         }
