@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import it.unipi.masss.LocationMonitor
 import com.google.android.material.button.MaterialButton
-import it.unipi.masss.project.R
-import it.unipi.masss.project.databinding.FragmentHomeBinding
+import it.unipi.masss.R
+import it.unipi.masss.databinding.FragmentHomeBinding
 import android.telephony.SmsManager
 import android.os.Build
 import android.util.Log

@@ -12,8 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import it.unipi.masss.project.R
-import it.unipi.masss.project.databinding.ActivityMainBinding
+import it.unipi.masss.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

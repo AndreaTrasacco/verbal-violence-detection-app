@@ -22,7 +22,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import android.provider.Settings
-import it.unipi.masss.project.R
 import java.util.concurrent.CompletableFuture
 
 const val DELAY_MS: Long = 1000
