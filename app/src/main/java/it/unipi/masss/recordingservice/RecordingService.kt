@@ -1,17 +1,23 @@
 package it.unipi.masss.recordingservice
 
+import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.app.TaskStackBuilder
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import it.unipi.masss.LocationMonitor
 import it.unipi.masss.MainActivity
 import it.unipi.masss.ProtectronApplication
 import it.unipi.masss.R
+import it.unipi.masss.Util.isServiceRunning
 import java.io.File
 import java.util.Timer
 import java.util.TimerTask
@@ -24,6 +30,7 @@ class RecordingService : Service() {
     private val recorderTask: RecorderTask? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         RecorderTask(this)
     } else null
+    private lateinit var notificationBuilder: NotificationCompat.Builder
 
     companion object {
         const val PERIOD: Long = 20000 // ms
@@ -35,8 +42,8 @@ class RecordingService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            Action.START.toString() -> startRecording()
-            Action.STOP.toString() -> stopRecording()
+            Action.START_RECORDING.toString() -> startRecording()
+            Action.STOP_RECORDING.toString() -> stopRecording()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -57,33 +64,40 @@ class RecordingService : Service() {
             )
         }
         // Create the persistent notification
-        val notification = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
+        notificationBuilder = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Live Recording")
+            .setContentTitle("Location Monitoring + Live Recording")
             .setContentText("Click to open the app")
             .setContentIntent(resultPendingIntent)
-            .build()
-        startForeground(ProtectronApplication.BG_NOTIF_ID, notification)
+            .setOnlyAlertOnce(true)
+        startForeground(ProtectronApplication.BG_NOTIF_ID, notificationBuilder.build())
         // Start the recording logic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             timer.schedule(RecorderTask(this), 0, PERIOD)
         }
     }
 
-    fun stopRecording(alert : Boolean = false){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            recorderTask?.cancel()
+    fun stopRecording(alert: Boolean = false) {
+        if (this.isServiceRunning(this::class.java)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                recorderTask?.cancel()
+            }
+            timer.cancel()
+            if (this.isServiceRunning(LocationMonitor::class.java)) {
+                notificationBuilder.setContentTitle("Location Monitoring")
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.notify(
+                    ProtectronApplication.BG_NOTIF_ID,
+                    notificationBuilder.build()
+                )
+            }
+            if (alert) {
+                Log.d("RecordingService", "Send alert!")
+                sendBroadcast(Intent(Action.SEND_ALERT.toString()))
+            }
+            stopSelf() // Stop foreground service
         }
-        timer.cancel()
-        /*if(this.isServiceRunning(LocationMonitor::class.java)){
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(ProtectronApplication.BG_NOTIF_ID, notification)
-        }*/
-        if (alert){
-            Log.d("RecordingService", "Send alert!")
-            // TODO SEND ALERT
-        }
-        stopSelf() // Stop foreground service
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -116,7 +130,10 @@ class RecordingService : Service() {
                     Log.d(RecorderTask::class.java.name, "Detected amplitude: $amplitude dB")
                     wavRecorder?.stopRecording()
                     if (amplitude > AMPLITUDE_THRESHOLD) {
-                        Log.d(RecorderTask::class.java.name, "Start recording for subsequent detection")
+                        Log.d(
+                            RecorderTask::class.java.name,
+                            "Start recording for subsequent detection"
+                        )
                         val outputFile = "recording_" + System.currentTimeMillis() + ".wav"
                         wavRecorder?.startRecording(outputFile, true)
                         Executors.newSingleThreadScheduledExecutor().schedule(
@@ -145,6 +162,6 @@ class RecordingService : Service() {
      * Intent actions to be used to START and STOP the recording service.
      */
     enum class Action {
-        START, STOP
+        START_RECORDING, STOP_RECORDING, SEND_ALERT
     }
 }

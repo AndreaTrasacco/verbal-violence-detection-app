@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**check if fine and background location permissions are granted, ask to grant them if they are not*/
+    /**Checks if fine and background location permissions are granted, ask to grant them if they are not*/
     private fun checkLocationPermissions() {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**Checks if recording permissions are granted, ask to grant them if they are not*/
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun checkRecordingPermissions() {
         if (ContextCompat.checkSelfPermission(

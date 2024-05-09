@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.location.Location
@@ -88,7 +89,7 @@ class LocationMonitor : Service() {
     // foreground service
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        createNotification()
+        notif = createNotification()
         startForeground(ProtectronApplication.BG_NOTIF_ID, notif)
         return START_NOT_STICKY;
     }
@@ -100,18 +101,23 @@ class LocationMonitor : Service() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun createNotification() {
+    private fun createNotification() : Notification {
         // create notification for when the service is started
         // use an intent to reopen the app if the notification is tapped
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val resultIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(resultIntent)
+            getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE)
-        notif = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
+        return NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(resources.getString(R.string.app_name))
+            .setContentTitle("Location Monitoring")
+            .setContentText("Click to open the app")
             .setContentIntent(pendingIntent)
+            .setOnlyAlertOnce(true)
             .build()
     }
 
@@ -142,5 +148,4 @@ class LocationMonitor : Service() {
         fusLocClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         return futureLocation.get()
     }
-
 }

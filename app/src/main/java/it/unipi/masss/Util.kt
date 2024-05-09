@@ -8,6 +8,6 @@ object Util {
     fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
         return (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
             .getRunningServices(Integer.MAX_VALUE)
-            .any { it -> it.service.className == service.name }
+            .any { it.service.className == service.name }
     }
 }

@@ -1,5 +1,6 @@
 package it.unipi.masss.recordingservice
 
+import android.util.Log
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import it.unipi.masss.ml.AudioModel
@@ -35,7 +36,9 @@ object VerbalViolenceDetector {
         val outputs = model!!.process(inputFeature0)
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
 
-        val maxIdx = outputFeature0.indices.maxBy { outputFeature0[it] } ?: -1
+        Log.d(this::class.java.simpleName, "Detection result: " + outputFeature0.contentToString())
+
+        val maxIdx = outputFeature0.indices.maxBy { outputFeature0[it] }
 
         return !((maxIdx == 0) || (maxIdx == 1) || (maxIdx == 2) || (maxIdx == 7))
     }

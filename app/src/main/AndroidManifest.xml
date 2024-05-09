@@ -9,12 +9,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="it.unipi.masss.ProtectronApplication"
+        android:name=".ProtectronApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -23,24 +22,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
-        android:enableOnBackInvokedCallback="true"
         android:preserveLegacyExternalStorage="true"
         tools:targetApi="31">
 
         <activity
-            android:name="it.unipi.masss.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name="it.unipi.masss.LocationMonitor" android:foregroundServiceType="location"/>
+        <service android:name=".LocationMonitor" android:foregroundServiceType="location"/>
 
         <service
-            android:name="it.unipi.masss.recordingservice.RecordingService"
+            android:name=".recordingservice.RecordingService"
             android:foregroundServiceType="microphone" />
 
         <receiver android:name=".OnBoot"
