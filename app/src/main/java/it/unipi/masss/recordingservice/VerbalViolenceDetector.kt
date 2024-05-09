@@ -1,6 +1,5 @@
 package it.unipi.masss.recordingservice
 
-import android.util.Log
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import it.unipi.masss.ml.AudioModel
@@ -8,9 +7,9 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 
-object AudioModelManager{
-    var model : AudioModel? = null
-    private fun extractFeatures(path:String): FloatArray {
+object VerbalViolenceDetector {
+    private var model: AudioModel? = null
+    private fun extractFeatures(path: String): FloatArray {
         val py = Python.getInstance()
         val module = py.getModule("script")
 
@@ -18,8 +17,9 @@ object AudioModelManager{
         val result = funCall?.call(path)
         return result!!.toJava(FloatArray::class.java)
     }
+
     fun classify(recordingService: RecordingService, path: String): Boolean {
-        if (! Python.isStarted()) {
+        if (!Python.isStarted()) {
             Python.start(AndroidPlatform(recordingService));
         }
         val audioFeatures = extractFeatures(path)

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.util.Log
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
@@ -62,7 +60,7 @@ class WavRecorder(val context: Context) {
 
     fun stopRecording() {
         recorder?.run {
-            isRecording = false;
+            isRecording = false
             cAmplitudeDb = 0
             stop()
             release()
@@ -109,14 +107,6 @@ class WavRecorder(val context: Context) {
 
             try {
                 val bData = short2byte(sData)
-                /*
-                                val amplitude: Int = (bData[0].toInt() and 0xff shl 8) or bData[1].toInt()
-                                val amplitudeDb = 20 * log10((abs(amplitude.toDouble())))
-
-                                if (amplitudeDb > cAmplitudeDb) { // Check amplitude
-                                    cAmplitudeDb = amplitudeDb.toInt()
-                                }
-                */
                 for (byte in bData)
                     data.add(byte)
             } catch (e: IOException) {

@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 
 class ProtectronApplication : Application() {
     companion object NotificationInfo {
@@ -12,6 +11,7 @@ class ProtectronApplication : Application() {
         const val CHANNEL_ID = "PROTECTRON"
         const val CHANNEL_NAME = "Nearby danger finder"
     }
+
     override fun onCreate() {
         super.onCreate()
         val channel = NotificationChannel(

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import it.unipi.masss.LocationMonitor
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
@@ -29,7 +28,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -39,23 +38,21 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val start_mon_btn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
+        val startMonBtn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
         if (requireContext().isServiceRunning(RecordingService::class.java)) {
             Log.d("HomeFragment", "Recording service is active")
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
-            start_mon_btn.backgroundTintList = colorStateList
+            startMonBtn.backgroundTintList = colorStateList
         } else {
             Log.d("HomeFragment", "Recording service is not active")
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
-            start_mon_btn.backgroundTintList = colorStateList
+            startMonBtn.backgroundTintList = colorStateList
         }
 
-        start_mon_btn.setOnClickListener {
+        startMonBtn.setOnClickListener {
 
-            // detect if the services are already running
-            var isActiveRecording = requireContext().isServiceRunning(RecordingService::class.java)
-
-            if (!isActiveRecording) {
+            // detect if the recording service is already running
+            if (!requireContext().isServiceRunning(RecordingService::class.java)) {
                 // Start Recording service
                 Intent(context?.applicationContext, RecordingService::class.java).also {
                     it.action = RecordingService.Action.START.toString()
@@ -64,7 +61,7 @@ class HomeFragment : Fragment() {
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
-                start_mon_btn.backgroundTintList = colorStateList
+                startMonBtn.backgroundTintList = colorStateList
             } else {
                 Intent(context?.applicationContext, RecordingService::class.java).also {
                     it.action = RecordingService.Action.STOP.toString()
@@ -73,7 +70,7 @@ class HomeFragment : Fragment() {
 
                 // set color of button
                 val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
-                start_mon_btn.backgroundTintList = colorStateList
+                startMonBtn.backgroundTintList = colorStateList
             }
 
         }
@@ -81,16 +78,14 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val start_mon_btn = requireView().findViewById<MaterialButton>(R.id.start_mon_btn)
+        val startMonBtn = requireView().findViewById<MaterialButton>(R.id.start_mon_btn)
 
-        //var isActive = requireContext().isServiceRunning(LocationMonitor::class.java) // TODO PER FRANCESCO: Location non decide colore bottone (?)
-        var isRecordingActive = requireContext().isServiceRunning(RecordingService::class.java)
-        if (!isRecordingActive) {
+        if (!requireContext().isServiceRunning(RecordingService::class.java)) {
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
-            start_mon_btn.backgroundTintList = colorStateList
+            startMonBtn.backgroundTintList = colorStateList
         } else {
             val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
-            start_mon_btn.backgroundTintList = colorStateList
+            startMonBtn.backgroundTintList = colorStateList
         }
     }
 
