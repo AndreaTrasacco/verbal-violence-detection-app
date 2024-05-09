@@ -9,7 +9,7 @@ class OnBoot : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
             val serviceIntent = Intent(context, LocationMonitor::class.java)
-            context.startService(serviceIntent);
+            context.startForegroundService(serviceIntent);
         }
     }
 }

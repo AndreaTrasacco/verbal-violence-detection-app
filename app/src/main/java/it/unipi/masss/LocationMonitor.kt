@@ -2,18 +2,17 @@ package it.unipi.masss
 
 import android.annotation.SuppressLint
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.app.TaskStackBuilder
-import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -22,8 +21,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import android.provider.Settings
 import java.util.concurrent.CompletableFuture
+
 
 const val DELAY_MS: Long = 1000
 
@@ -112,6 +111,7 @@ class LocationMonitor : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         }
+
         return NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("Location Monitoring")
@@ -148,4 +148,15 @@ class LocationMonitor : Service() {
         fusLocClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         return futureLocation.get()
     }
+
+    /**Opens Google Maps and shows the position where the person in danger is located*/
+    private fun openPersonInDangerLocation(lat: Double, long: Double) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://maps.google.com/maps?q=$lat,$long")
+        )
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity")
+        startActivity(intent)
+    }
+
 }
