@@ -1,6 +1,5 @@
 package it.unipi.masss.recordingservice
 
-import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
@@ -12,7 +11,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import it.unipi.masss.Action
 import it.unipi.masss.LocationMonitor
 import it.unipi.masss.MainActivity
 import it.unipi.masss.ProtectronApplication
@@ -66,7 +65,7 @@ class RecordingService : Service() {
         // Create the persistent notification
         notificationBuilder = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Location Monitoring + Live Recording")
+            .setContentTitle("Live Monitoring")
             .setContentText("Click to open the app")
             .setContentIntent(resultPendingIntent)
             .setOnlyAlertOnce(true)
@@ -156,12 +155,5 @@ class RecordingService : Service() {
                 }, CHECK_AMPLITUDE_SECONDS, TimeUnit.SECONDS
             )
         }
-    }
-
-    /**
-     * Intent actions to be used to START and STOP the recording service.
-     */
-    enum class Action {
-        START_RECORDING, STOP_RECORDING, SEND_ALERT
     }
 }

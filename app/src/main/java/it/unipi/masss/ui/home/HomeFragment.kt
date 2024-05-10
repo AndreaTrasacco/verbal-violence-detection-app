@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
+import it.unipi.masss.Action
+import it.unipi.masss.ShakingDetector
 import it.unipi.masss.recordingservice.RecordingService
 import it.unipi.masss.Util.isServiceRunning
 
@@ -27,6 +30,18 @@ class HomeFragment : Fragment() {
     private val alertStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             updateButtonColor(true)
+            if(context?.isServiceRunning(RecordingService::class.java)!!){
+                Intent(context.applicationContext, ShakingDetector::class.java).also {
+                    it.action = Action.STOP_SHAKING_DETECTION.toString()
+                    context.applicationContext?.startService(it)
+                }
+            }
+            if(context.isServiceRunning(ShakingDetector::class.java)){
+                Intent(context.applicationContext, RecordingService::class.java).also {
+                    it.action = Action.STOP_RECORDING.toString()
+                    context.applicationContext?.startService(it)
+                }
+            }
         }
     }
 
@@ -35,8 +50,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this)[HomeViewModel::class.java]
+        //val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -58,16 +72,27 @@ class HomeFragment : Fragment() {
             if (!requireContext().isServiceRunning(RecordingService::class.java)) {
                 // Start Recording service
                 Intent(context?.applicationContext, RecordingService::class.java).also {
-                    it.action = RecordingService.Action.START_RECORDING.toString()
+                    it.action = Action.START_RECORDING.toString()
+                    context?.applicationContext?.startService(it)
+                }
+
+                Intent(context?.applicationContext, ShakingDetector::class.java).also {
+                    it.action = Action.START_SHAKING_DETECTION.toString()
                     context?.applicationContext?.startService(it)
                 }
 
                 updateButtonColor()
             } else {
                 Intent(context?.applicationContext, RecordingService::class.java).also {
-                    it.action = RecordingService.Action.STOP_RECORDING.toString()
+                    it.action = Action.STOP_RECORDING.toString()
                     context?.applicationContext?.startService(it)
                 }
+
+                Intent(context?.applicationContext, ShakingDetector::class.java).also {
+                    it.action = Action.STOP_SHAKING_DETECTION.toString()
+                    context?.applicationContext?.startService(it)
+                }
+
 
                 updateButtonColor(true)
             }
@@ -77,7 +102,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().registerReceiver(alertStateReceiver, IntentFilter(RecordingService.Action.SEND_ALERT.toString()))
+        requireActivity().registerReceiver(alertStateReceiver, IntentFilter(Action.SEND_ALERT.toString()))
 
         if (!requireContext().isServiceRunning(RecordingService::class.java))
             updateButtonColor(true);
