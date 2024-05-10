@@ -29,7 +29,7 @@ class SosContact : ConstraintLayout {
 
     private fun init(text: String) {
         LayoutInflater.from(context).inflate(R.layout.sos_contact, this, true)
-        textView = findViewById(R.id.textView4)
+        textView = findViewById(R.id.contactText)
         textView?.text = text
 
         cancelButton = findViewById(R.id.floatingActionButton)

@@ -20,4 +20,6 @@
     <string name="close_app">Close app</string>
     <string name="sos">SOS</string>
     <string name="sends_manual_sos">Sends manual SOS</string>
+    <string name="closeaudio">CloseAudio</string>
+    <string name="play_audio">playaudio</string>
 </resources>

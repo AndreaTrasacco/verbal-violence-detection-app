@@ -1,6 +1,5 @@
 package it.unipi.masss.ui.settings
 
-import SosContact
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -24,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.ContentUris
+import SosContact
 
 
 class SettingsFragment : Fragment() {
