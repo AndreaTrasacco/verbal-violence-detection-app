@@ -88,15 +88,13 @@ class SendAlertReceiver : BroadcastReceiver() {
                     with(NotificationManagerCompat.from(context)) {
                         cancel(1)
                     }
-                    // TODO: SEND ALERT
+                    val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
+                    // TODO Get Location
+                    val postData = "key1=value1&key2=value2"
+                    val responseData = sendPostRequest(apiUrl, postData)
                 }
             }.start()
         }
-        // TODO Send Alert
-        val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
-        // TODO Get Location
-        val postData = "key1=value1&key2=value2"
-        val responseData = sendPostRequest(apiUrl, postData)
     }
 
     private fun sendPostRequest(urlString: String, postData: String): String {
