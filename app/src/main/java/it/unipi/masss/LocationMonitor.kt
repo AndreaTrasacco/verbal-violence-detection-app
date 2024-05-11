@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import android.provider.Settings
 import java.util.concurrent.CompletableFuture
 
 

@@ -28,4 +28,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35"
         android:contentDescription="@string/recording_service_btn_desc"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/manual_sos_btn"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/sends_manual_sos"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/sos"
+        android:textSize="30sp"
+        app:backgroundTint="#FF0000"
+        app:cornerRadius="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.754"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
