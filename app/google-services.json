@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "12876115494",
-    "project_id": "protectron-148e0",
-    "storage_bucket": "protectron-148e0.appspot.com"
+    "project_number": "962924880762",
+    "project_id": "protectronserver",
+    "storage_bucket": "protectronserver.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:12876115494:android:920033c186105fcf8240e7",
+        "mobilesdk_app_id": "1:962924880762:android:c631bbf5f6a557861a2cc3",
         "android_client_info": {
           "package_name": "it.unipi.masss"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB23fhVDs6qEuFyLYgJAi2joZwrw6CWTlE"
+          "current_key": "AIzaSyCTjEbNQqX_2khW3411ViyOSZS0j65VBZ4"
         }
       ],
       "services": {
