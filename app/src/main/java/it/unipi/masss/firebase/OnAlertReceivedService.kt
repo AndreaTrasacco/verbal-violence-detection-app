@@ -28,6 +28,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             // TODO come gestire la posizione in cui si verifica l'aggressione nella notifica??
             showNotification("A new violence is detected")
         }
+
     }
 
     override fun onNewToken(token: String) {
