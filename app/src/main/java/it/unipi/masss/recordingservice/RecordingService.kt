@@ -48,7 +48,6 @@ class RecordingService : Service() {
     }
 
     override fun onDestroy() {
-        VerbalViolenceDetector.destroyModel()
         super.onDestroy()
     }
 
