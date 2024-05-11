@@ -13,8 +13,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import it.unipi.masss.project.R
-import it.unipi.masss.project.databinding.FragmentSettingsBinding
+import it.unipi.masss.R
+import it.unipi.masss.databinding.FragmentSettingsBinding
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.ContactsContract

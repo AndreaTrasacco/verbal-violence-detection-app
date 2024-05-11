@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import it.unipi.masss.databinding.FragmentRecordingsBinding
 import it.unipi.masss.project.R
 import it.unipi.masss.project.databinding.FragmentRecordingsBinding
 import java.io.File

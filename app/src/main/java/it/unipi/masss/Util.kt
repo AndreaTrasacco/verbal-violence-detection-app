@@ -1,8 +1,13 @@
 package it.unipi.masss
 
+import android.app.ActivityManager
+import android.content.Context
+
 object Util {
-    const val BG_NOTIF_ID = 69
-    const val CHANNEL_ID = "PROTECTRON"
-    const val APP_NAME = "PROTECTRON"
-    const val CHANNEL_NAME = "Nearby danger finder"
+    @Suppress("DEPRECATION")
+    fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
+        return (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Integer.MAX_VALUE)
+            .any { it.service.className == service.name }
+    }
 }
