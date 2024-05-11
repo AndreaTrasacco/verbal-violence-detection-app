@@ -14,6 +14,9 @@ import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.recordingservice.RecordingService
 import it.unipi.masss.ProtectronApplication.Companion.CHANNEL_ID
 import it.unipi.masss.ProtectronApplication.Companion.COUNTDOWN_S
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 
 class SendAlertReceiver : BroadcastReceiver() {
     private var countDownTimer: CountDownTimer? = null
@@ -21,12 +24,11 @@ class SendAlertReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == "ACTION_ABORT") {
             countDownTimer?.cancel()
-            if(context == null) return
+            if (context == null) return
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-        }
-        else {
+        } else {
             if (context?.isServiceRunning(RecordingService::class.java)!!) {
                 Intent(context.applicationContext, ShakingDetector::class.java).also {
                     it.action = Action.STOP_SHAKING_DETECTION.toString()
@@ -56,7 +58,11 @@ class SendAlertReceiver : BroadcastReceiver() {
                 .setContentTitle(context.getString(R.string.danger_detected_notification))
                 .setContentText(COUNTDOWN_S.toString() + context.getString(R.string.countdown))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .addAction(R.drawable.ic_close, context.getString(R.string.abort), abortPendingIntent)
+                .addAction(
+                    R.drawable.ic_close,
+                    context.getString(R.string.abort),
+                    abortPendingIntent
+                )
 
             // notify user
             if (checkGenericPermission(context, Manifest.permission.FOREGROUND_SERVICE)) {
@@ -86,5 +92,33 @@ class SendAlertReceiver : BroadcastReceiver() {
                 }
             }.start()
         }
+        // TODO Send Alert
+        val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
+        // TODO Get Location
+        val postData = "key1=value1&key2=value2"
+        val responseData = sendPostRequest(apiUrl, postData)
+    }
+
+    private fun sendPostRequest(urlString: String, postData: String): String {
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+
+        val outputStream = connection.outputStream
+        outputStream.use {
+            val writer = OutputStreamWriter(it)
+            writer.write(postData)
+            writer.flush()
+        }
+
+        val response = StringBuilder()
+        connection.inputStream.bufferedReader().use {
+            it.lines().forEach { line ->
+                response.append(line)
+            }
+        }
+
+        return response.toString()
     }
 }
