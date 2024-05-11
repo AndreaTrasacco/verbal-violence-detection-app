@@ -30,18 +30,6 @@ class HomeFragment : Fragment() {
     private val alertStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             updateButtonColor(true)
-            if(context?.isServiceRunning(RecordingService::class.java)!!){
-                Intent(context.applicationContext, ShakingDetector::class.java).also {
-                    it.action = Action.STOP_SHAKING_DETECTION.toString()
-                    context.applicationContext?.startService(it)
-                }
-            }
-            if(context.isServiceRunning(ShakingDetector::class.java)){
-                Intent(context.applicationContext, RecordingService::class.java).also {
-                    it.action = Action.STOP_RECORDING.toString()
-                    context.applicationContext?.startService(it)
-                }
-            }
         }
     }
 
