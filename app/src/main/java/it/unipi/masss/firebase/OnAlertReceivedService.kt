@@ -9,6 +9,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import it.unipi.masss.MainActivity
@@ -27,7 +28,6 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             // TODO come gestire la posizione in cui si verifica l'aggressione nella notifica??
             showNotification("A new violence is detected")
         }
-
     }
 
     override fun onNewToken(token: String) {
