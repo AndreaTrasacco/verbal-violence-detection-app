@@ -11,6 +11,7 @@ class ProtectronApplication : Application() {
         const val BG_NOTIF_ID = 69
         const val CHANNEL_ID = "PROTECTRON"
         const val CHANNEL_NAME = "Nearby danger finder"
+        const val COUNTDOWN_S = 5
     }
 
     override fun onCreate() {

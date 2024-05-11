@@ -11,12 +11,15 @@
     <string name="title_alert_options">ALERT OPTIONS</string>
     <string name="close_contact_option">Alert people close to your location</string>
     <string name="specific_contact_option">Alert chosen contacts</string>
-
     <string name="insert_contact">Insert contact</string>
+
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="abort">Abort</string>
+    <string name="countdown"> seconds remaining…</string>
 
     <string name="welcome_msg_loc">This app needs to access to the user location to work, please grant the permission and select "always allow"</string>
     <string name="welcome_msg_mic">This app needs to access to the microphone, please grant the permission and select "always allow"</string>
+    <string name="danger_detected_notification">Are you in danger? Sending a request for help</string>
     <string name="close_app">Close app</string>
 </resources>
