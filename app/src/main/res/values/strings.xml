@@ -16,7 +16,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
-    <string name="welcome_msg">This app needs to access the user location to work, please grant the permission and select "always allow"</string>
+    <string name="welcome_msg_loc">This app needs to access to the user location to work, please grant the permission and select "always allow"</string>
+    <string name="welcome_msg_mic">This app needs to access to the microphone, please grant the permission and select "always allow"</string>
     <string name="close_app">Close app</string>
     <string name="sos">SOS</string>
     <string name="sends_manual_sos">Sends manual SOS</string>

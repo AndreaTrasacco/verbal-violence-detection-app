@@ -5,9 +5,14 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,20 +28,31 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import android.app.PendingIntent
-
+import it.unipi.masss.R
+import it.unipi.masss.databinding.FragmentHomeBinding
+import com.google.android.material.button.MaterialButton
+import it.unipi.masss.Action
+import it.unipi.masss.ShakingDetector
+import it.unipi.masss.recordingservice.RecordingService
+import it.unipi.masss.Util.isServiceRunning
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private val alertStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            updateButtonColor(true)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        //val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -58,10 +74,11 @@ class HomeFragment : Fragment() {
         val smsManager: SmsManager = context.getSystemService(SmsManager::class.java)
         smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null)
     }
-
+      
+ 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val start_mon_btn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
+        val startMonBtn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
         val manual_sos_btn = view.findViewById<MaterialButton>(R.id.manual_sos_btn)
 
         val requestPermissionLauncher =
@@ -82,32 +99,45 @@ class HomeFragment : Fragment() {
             requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
         }
 
-        requireActivity().getSystemService(SmsManager::class.java)
         val phoneNumber = "1234567890" // Replace with the phone number you want to send the SMS to
         val message = "Hello, this is a test message!" // Replace with your message
+      
+        if (requireContext().isServiceRunning(RecordingService::class.java))
+            updateButtonColor()
+        else
+            updateButtonColor(true)
 
-        start_mon_btn.setOnClickListener {
+        startMonBtn.setOnClickListener {
 
-            // detect if the service is already running
-            var isActive = requireContext().isServiceRunning(LocationMonitor::class.java)
+            // detect if the recording service is already running
+            if (!requireContext().isServiceRunning(RecordingService::class.java)) {
+                // Start Recording service
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = Action.START_RECORDING.toString()
+                    context?.applicationContext?.startService(it)
+                }
 
-            if (!isActive) {
-                // start background monitoring service
-                val intent = Intent(context, LocationMonitor::class.java)
-                context?.startService(intent)
+                Intent(context?.applicationContext, ShakingDetector::class.java).also {
+                    it.action = Action.START_SHAKING_DETECTION.toString()
+                    context?.applicationContext?.startService(it)
+                }
 
-                // set color of button
-                val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
-                start_mon_btn.backgroundTintList = colorStateList
+                updateButtonColor()
+            } else {
+                Intent(context?.applicationContext, RecordingService::class.java).also {
+                    it.action = Action.STOP_RECORDING.toString()
+                    context?.applicationContext?.startService(it)
+                }
+
+                Intent(context?.applicationContext, ShakingDetector::class.java).also {
+                    it.action = Action.STOP_SHAKING_DETECTION.toString()
+                    context?.applicationContext?.startService(it)
+                }
+
+
+                updateButtonColor(true)
             }
-            else {
-                // stop background monitoring service
-                val intent = Intent(context, LocationMonitor::class.java)
-                context?.stopService(intent)
-                // set color of button
-                val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
-                start_mon_btn.backgroundTintList = colorStateList
-            }
+
         }
 
         manual_sos_btn.setOnClickListener {
@@ -134,21 +164,30 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val start_mon_btn = requireView().findViewById<MaterialButton>(R.id.start_mon_btn)
+        requireActivity().registerReceiver(alertStateReceiver, IntentFilter(Action.SEND_ALERT.toString()))
 
-        var isActive = requireContext().isServiceRunning(LocationMonitor::class.java)
-        if(!isActive) {
-            val colorStateList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
-            start_mon_btn.backgroundTintList = colorStateList
-        }
-        else {
-            val colorStateList = ColorStateList.valueOf(Color.parseColor("#470000"))
-            start_mon_btn.backgroundTintList = colorStateList
-        }
+        if (!requireContext().isServiceRunning(RecordingService::class.java))
+            updateButtonColor(true);
+        else
+            updateButtonColor()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().unregisterReceiver(alertStateReceiver)
+    }
+
+    private fun updateButtonColor(red: Boolean = false) {
+        val colorStateList = if (red)
+            ColorStateList.valueOf(Color.parseColor("#FF0000"))
+        else
+            ColorStateList.valueOf(Color.parseColor("#470000"))
+        requireView().findViewById<MaterialButton>(R.id.start_mon_btn).backgroundTintList =
+            colorStateList
     }
 }
