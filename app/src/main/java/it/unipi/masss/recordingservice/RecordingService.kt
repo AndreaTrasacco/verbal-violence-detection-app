@@ -12,7 +12,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import it.unipi.masss.Action
-import it.unipi.masss.LocationMonitor
 import it.unipi.masss.MainActivity
 import it.unipi.masss.ProtectronApplication
 import it.unipi.masss.R
@@ -81,15 +80,6 @@ class RecordingService : Service() {
                 recorderTask?.cancel()
             }
             timer.cancel()
-            if (this.isServiceRunning(LocationMonitor::class.java)) {
-                notificationBuilder.setContentTitle("Location Monitoring")
-                val notificationManager =
-                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.notify(
-                    ProtectronApplication.BG_NOTIF_ID,
-                    notificationBuilder.build()
-                )
-            }
             if (alert) {
                 Log.d("RecordingService", "Send alert!")
                 sendBroadcast(Intent(Action.SEND_ALERT.toString()))

@@ -2,7 +2,6 @@ package it.unipi.masss
 
 import android.Manifest
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -89,8 +88,8 @@ class SendAlertReceiver : BroadcastReceiver() {
                         cancel(1)
                     }
                     val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
-                    // TODO Get Location
-                    val postData = "key1=value1&key2=value2"
+                    var location = LocationHandling.getPreciseLocation(context).get()
+                    val postData = "lat=" + location?.latitude + "&long=" + location?.longitude
                     val responseData = sendPostRequest(apiUrl, postData)
                 }
             }.start()

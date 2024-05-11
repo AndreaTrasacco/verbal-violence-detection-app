@@ -6,10 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import it.unipi.masss.MainActivity
@@ -24,8 +22,13 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
+        // TODO Check che io non sia il mittente del messaggio
         if (remoteMessage.notification != null) {
             // TODO come gestire la posizione in cui si verifica l'aggressione nella notifica??
+            // Get location from message payload
+            // Compute distance
+            // If get distance < Threshold
+            // Show notification which opens Maps if clicked (openPersonInDangerLocation)
             showNotification("A new violence is detected")
         }
     }
@@ -78,14 +81,12 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT,
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+            channelId,
+            "Channel human readable title",
+            NotificationManager.IMPORTANCE_DEFAULT,
+        )
+        notificationManager.createNotificationChannel(channel)
 
         val notificationId = 0
         notificationManager.notify(notificationId, notificationBuilder.build())
