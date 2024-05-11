@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import it.unipi.masss.project.R
+import it.unipi.masss.R
 
 class AudioItem : ConstraintLayout {
     private var textView: TextView? = null

@@ -9,14 +9,13 @@ import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import it.unipi.masss.databinding.FragmentRecordingsBinding
-import it.unipi.masss.project.R
-import it.unipi.masss.project.databinding.FragmentRecordingsBinding
 import java.io.File
 import AudioItem
 
 import android.media.MediaPlayer
 import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import it.unipi.masss.R
 
 
 class RecordingsFragment : Fragment() {

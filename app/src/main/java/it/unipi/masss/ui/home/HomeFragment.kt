@@ -6,24 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import it.unipi.masss.LocationMonitor
-import com.google.android.material.button.MaterialButton
-import it.unipi.masss.R
-import it.unipi.masss.databinding.FragmentHomeBinding
 import android.telephony.SmsManager
-import android.os.Build
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -34,7 +25,6 @@ import com.google.android.material.button.MaterialButton
 import it.unipi.masss.Action
 import it.unipi.masss.ShakingDetector
 import it.unipi.masss.recordingservice.RecordingService
-import it.unipi.masss.Util.isServiceRunning
 
 class HomeFragment : Fragment() {
 

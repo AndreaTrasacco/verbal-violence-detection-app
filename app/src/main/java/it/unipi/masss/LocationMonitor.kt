@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient

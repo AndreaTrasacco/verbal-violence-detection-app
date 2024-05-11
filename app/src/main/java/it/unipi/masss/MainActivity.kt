@@ -18,9 +18,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import it.unipi.masss.databinding.ActivityMainBinding
 import it.unipi.masss.Util.isServiceRunning
-import it.unipi.masss.recordingservice.RecordingService
+import it.unipi.masss.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
