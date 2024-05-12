@@ -97,6 +97,6 @@ class ShakingDetector : Service() {
     private fun stopShakingDetection(){
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.unregisterListener(sensorEventListener)
-        stopSelf();
+        stopSelf()
     }
 }

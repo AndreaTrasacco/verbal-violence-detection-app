@@ -6,10 +6,11 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
 object Util {
+    @Suppress("DEPRECATION")
     fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
-        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val runningProcesses = manager.runningAppProcesses
-        return runningProcesses.any { it.processName == service.name }
+        return (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Integer.MAX_VALUE)
+            .any { it.service.className == service.name }
     }
 
     /**Returns true if the user has granted the permission, false otherwise*/

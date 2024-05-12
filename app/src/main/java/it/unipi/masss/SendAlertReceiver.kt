@@ -9,6 +9,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.recordingservice.RecordingService
@@ -23,7 +24,7 @@ class SendAlertReceiver : BroadcastReceiver() {
     val apiUrl = "http://127.0.0.1:5001/protectronserver/us-central1/alert"
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == "ACTION_ABORT") {
+        /*if (intent?.action == "ACTION_ABORT") {
             countDownTimer?.cancel()
             if (context == null) return
             with(NotificationManagerCompat.from(context)) {
@@ -99,7 +100,31 @@ class SendAlertReceiver : BroadcastReceiver() {
                     Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
                 }
             }.start()
+        }*/
+        if (context?.isServiceRunning(ShakingDetector::class.java)!!) {
+            Log.d("SendAlertReceiver", "SEND STOP ShakingDetector")
+            Intent(context.applicationContext, ShakingDetector::class.java).also {
+                it.action = Action.STOP_SHAKING_DETECTION.toString()
+                context.applicationContext?.startService(it)
+            }
         }
+        if (context.isServiceRunning(RecordingService::class.java)) {
+            Log.d("SendAlertReceiver", "SEND STOP RecordingService")
+            Intent(context.applicationContext, RecordingService::class.java).also {
+                it.action = Action.STOP_RECORDING.toString()
+                context.applicationContext?.startService(it)
+            }
+        }
+        Log.d("SendAlertReceiver", "SEND ALERT")
+        val location = LocationHandling.getPreciseLocation(context).get()
+
+        val sharedPreference =  context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+        val token = sharedPreference.getString("token", "defaultValue")
+        val postData = "token=" + token +
+                "lat=" + location?.latitude +
+                "&long=" + location?.longitude
+        val responseData = sendPostRequest(apiUrl, postData)
+        Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
     }
 
     private fun sendPostRequest(urlString: String, postData: String): String {
