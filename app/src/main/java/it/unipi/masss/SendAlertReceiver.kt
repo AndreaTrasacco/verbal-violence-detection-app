@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.unipi.masss.Util.checkGenericPermission
@@ -88,9 +89,11 @@ class SendAlertReceiver : BroadcastReceiver() {
                         cancel(1)
                     }
                     val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
-                    var location = LocationHandling.getPreciseLocation(context).get()
+                    val location = LocationHandling.getPreciseLocation(context).get()
+                    // TODO Add also identifier of sender?
                     val postData = "lat=" + location?.latitude + "&long=" + location?.longitude
                     val responseData = sendPostRequest(apiUrl, postData)
+                    Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
                 }
             }.start()
         }

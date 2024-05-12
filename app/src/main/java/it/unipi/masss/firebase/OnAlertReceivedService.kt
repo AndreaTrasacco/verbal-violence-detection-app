@@ -23,6 +23,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         // TODO Check che io non sia il mittente del messaggio
+        Log.d(OnAlertReceivedService::class.java.simpleName, remoteMessage.toString())
         if (remoteMessage.notification != null) {
             // TODO come gestire la posizione in cui si verifica l'aggressione nella notifica??
             // Get location from message payload
