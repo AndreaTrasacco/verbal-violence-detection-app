@@ -75,7 +75,7 @@ class RecordingService : Service() {
     }
 
     fun stopRecording(alert: Boolean = false) {
-        Log.d(
+        Log.d( // TODO rimuovere
             "RS",
             "Stop recording"
         )

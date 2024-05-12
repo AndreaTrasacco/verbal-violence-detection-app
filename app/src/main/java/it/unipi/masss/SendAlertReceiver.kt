@@ -42,7 +42,6 @@ class SendAlertReceiver : BroadcastReceiver() {
                     context.applicationContext?.startService(it)
                 }
             }
-
             // intent to cancel count down
             val abortIntent = Intent(context, SendAlertReceiver::class.java)
             abortIntent.action = "ACTION_ABORT"
@@ -89,10 +88,13 @@ class SendAlertReceiver : BroadcastReceiver() {
                     with(NotificationManagerCompat.from(context)) {
                         cancel(1)
                     }
-
                     val location = LocationHandling.getPreciseLocation(context).get()
-                    // TODO Add also identifier of sender?
-                    val postData = "lat=" + location?.latitude + "&long=" + location?.longitude
+
+                    val sharedPreference =  context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+                    val token = sharedPreference.getString("token", "defaultValue")
+                    val postData = "token=" + token +
+                            "lat=" + location?.latitude +
+                            "&long=" + location?.longitude
                     val responseData = sendPostRequest(apiUrl, postData)
                     Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
                 }

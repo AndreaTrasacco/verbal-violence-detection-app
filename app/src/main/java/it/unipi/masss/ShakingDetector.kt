@@ -49,6 +49,7 @@ class ShakingDetector : Service() {
                     (abs(xAccl.toDouble()) + abs(yAccl.toDouble()) + abs(zAccl.toDouble())).toFloat()
 
                 if (sum > 40) {
+                    Log.d("ShakingDetector", "Detected shaking")
                     if(System.currentTimeMillis() - lastUpdateOfNumTimes < MS_BETWEEN_NUM_TIMES){
                         lastUpdateOfNumTimes = System.currentTimeMillis()
                         numTimes++
@@ -60,7 +61,7 @@ class ShakingDetector : Service() {
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                     }
                 }
-                //Log.d("ShakingDetector", "Sensor Changed $sum")
+                Log.d("ShakingDetector", "Sensor Changed $sum")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, i: Int) {
