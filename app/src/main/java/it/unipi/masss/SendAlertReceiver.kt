@@ -20,6 +20,7 @@ import java.net.URL
 
 class SendAlertReceiver : BroadcastReceiver() {
     private var countDownTimer: CountDownTimer? = null
+    val apiUrl = "http://127.0.0.1:5001/protectronserver/us-central1/alert"
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == "ACTION_ABORT") {
@@ -88,7 +89,7 @@ class SendAlertReceiver : BroadcastReceiver() {
                     with(NotificationManagerCompat.from(context)) {
                         cancel(1)
                     }
-                    val apiUrl = "https://api.example.com/post" // TODO USE CONSTANT
+
                     val location = LocationHandling.getPreciseLocation(context).get()
                     // TODO Add also identifier of sender?
                     val postData = "lat=" + location?.latitude + "&long=" + location?.longitude

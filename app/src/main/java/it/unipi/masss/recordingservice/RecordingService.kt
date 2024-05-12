@@ -75,6 +75,10 @@ class RecordingService : Service() {
     }
 
     fun stopRecording(alert: Boolean = false) {
+        Log.d(
+            "RS",
+            "Stop recording"
+        )
         if (this.isServiceRunning(this::class.java)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 recorderTask?.cancel()

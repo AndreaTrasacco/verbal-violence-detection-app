@@ -60,7 +60,7 @@ class ShakingDetector : Service() {
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                     }
                 }
-                Log.d("ShakingDetector", "Sensor Changed $sum")
+                //Log.d("ShakingDetector", "Sensor Changed $sum")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, i: Int) {
