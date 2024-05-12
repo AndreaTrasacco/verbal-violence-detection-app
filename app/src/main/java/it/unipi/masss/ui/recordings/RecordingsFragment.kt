@@ -11,11 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import it.unipi.masss.databinding.FragmentRecordingsBinding
 import java.io.File
 import AudioItem
+import android.icu.text.SimpleDateFormat
 
 import android.media.MediaPlayer
 import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.unipi.masss.R
+import java.util.Date
+import java.util.Locale
 
 
 class RecordingsFragment : Fragment() {
@@ -53,10 +56,15 @@ class RecordingsFragment : Fragment() {
         val files = directory.listFiles()
         Log.d("Recordings", "FILES: $files")
 
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
         // Iterate over the files and print their names
         files?.forEach { file ->
             if (file.isFile && file.name.startsWith("recording_")) {
-                val audioItem = AudioItem(requireContext(), file.name, file.name)
+                val date = Date(file.lastModified())
+                val dateString = sdf.format(date)
+
+                val audioItem = AudioItem(requireContext(), dateString, file.name)
                 audioListLayout.addView(audioItem)
                 audioListLayout.requestLayout()
                 scrollViewLayout.requestLayout()
