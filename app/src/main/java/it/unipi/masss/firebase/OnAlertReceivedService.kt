@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
@@ -42,15 +43,15 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             val long = remoteMessage.data.get("long")
 
             // Compute distance
-            val location = LocationHandling.getPreciseLocation(this).get()
-            if(lat != null && long != null && location != null) {
-                val dist = distance(lat.toDouble(), long.toDouble(),
-                    location.latitude, location.longitude)
-                if (dist <= THRESHOLD) {
-                    // it also open maps
-                    showNotification("Someone is in danger! Click to locate",
-                        lat.toDouble(), long.toDouble())
-                }
+            val personInDangerLocation = Location("") //provider name is unnecessary
+            personInDangerLocation.latitude = lat!!.toDouble()
+            personInDangerLocation.longitude = long!!.toDouble()
+            val distance = LocationHandling.distanceFromPersonInDanger(this, personInDangerLocation)
+
+            if (distance <= THRESHOLD) {
+                // it also open maps
+                showNotification("Someone is in danger! Click to locate",
+                    lat.toDouble(), long.toDouble())
             }
         }
     }
@@ -115,7 +116,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         ) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
         dist = acos(dist)
         dist = rad2deg(dist)
-        dist = dist * 60 * 1.1515
+        dist *= 60 * 1.1515
         return (dist)
     }
 
@@ -129,6 +130,6 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "FirebaseNotificationService"
-        private const val THRESHOLD = 1.0 // TODO settare
+        private const val THRESHOLD = 100000.0 // TODO settare
     }
 }

@@ -80,7 +80,7 @@ class SendAlertReceiver : BroadcastReceiver() {
 
     class AlertNotificationTimer(val builder: NotificationCompat.Builder, val context: Context): CountDownTimer(COUNTDOWN_S.toLong() * 1000, 1000) {
 
-        private val apiUrl = "http://127.0.0.1:5001/protectronserver/us-central1/alert"
+        private val apiUrl = "https://us-central1-protectronserver.cloudfunctions.net/alert"
         override fun onTick(millisUntilFinished: Long) {
             builder.setContentText("${millisUntilFinished / 1000} " + context.getString(R.string.countdown))
 
@@ -107,8 +107,8 @@ class SendAlertReceiver : BroadcastReceiver() {
                 else {
                     Log.d("DEBUG", "Location fetched $location")
                     val postData = "token=" + token +
-                            "lat=" + location?.latitude +
-                            "&long=" + location?.longitude
+                            "&lat=" + location.latitude +
+                            "&long=" + location.longitude
                     val responseData = sendPostRequest(apiUrl, postData)
                     Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
                 }
