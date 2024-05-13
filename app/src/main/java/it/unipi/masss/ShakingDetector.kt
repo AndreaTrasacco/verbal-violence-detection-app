@@ -20,7 +20,7 @@ class ShakingDetector : Service() {
     private var lastUpdateOfNumTimes : Long = System.currentTimeMillis()
 
     companion object {
-        const val SHAKING_DETECTIONS_THRESHOLD = 10
+        const val SHAKING_DETECTIONS_THRESHOLD = 1
         const val MS_BETWEEN_NUM_TIMES : Long = 2000
     }
 
@@ -48,8 +48,8 @@ class ShakingDetector : Service() {
                 val sum =
                     (abs(xAccl.toDouble()) + abs(yAccl.toDouble()) + abs(zAccl.toDouble())).toFloat()
 
-                if (sum > 40) {
-                    Log.d("ShakingDetector", "Detected shaking")
+                if (sum > 0.02) {
+                    Log.d("ShakingDetector", "Detected shaking of: $sum")
                     if(System.currentTimeMillis() - lastUpdateOfNumTimes < MS_BETWEEN_NUM_TIMES){
                         lastUpdateOfNumTimes = System.currentTimeMillis()
                         numTimes++
@@ -61,7 +61,7 @@ class ShakingDetector : Service() {
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                     }
                 }
-                Log.d("ShakingDetector", "Sensor Changed $sum")
+                //Log.d("ShakingDetector", "Sensor Changed $sum")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, i: Int) {

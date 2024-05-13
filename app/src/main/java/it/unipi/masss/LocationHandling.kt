@@ -33,7 +33,7 @@ object LocationHandling {
             override fun onLocationResult(locationResult: LocationResult) {
                 val currentLoc = locationResult.lastLocation
                 if(currentLoc != null) {
-                    Log.d("PRECISE_LOC", currentLoc.toString())
+                    Log.d("PRECISE_LOC", "lat: ${currentLoc.latitude} long: ${currentLoc.longitude}")
                     fusedLocationClient.removeLocationUpdates(this)
                     futureLocation.complete(currentLoc)
                 }

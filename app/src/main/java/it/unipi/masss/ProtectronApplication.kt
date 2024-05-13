@@ -5,15 +5,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.IntentFilter
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 class ProtectronApplication : Application() {
     companion object {
         const val BG_NOTIF_ID = 69
         const val CHANNEL_ID = "PROTECTRON"
         const val CHANNEL_NAME = "Nearby danger finder"
-        const val COUNTDOWN_S = 5
+        const val COUNTDOWN_S = 10
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate() {
         super.onCreate()
         val channel = NotificationChannel(
@@ -28,6 +31,7 @@ class ProtectronApplication : Application() {
         val sendAlertReceiver = SendAlertReceiver()
         val filter = IntentFilter()
         filter.addAction(Action.SEND_ALERT.toString())
-        registerReceiver(sendAlertReceiver, filter)
+        filter.addAction("ACTION_ABORT")
+        registerReceiver(sendAlertReceiver, filter, RECEIVER_NOT_EXPORTED)
     }
 }

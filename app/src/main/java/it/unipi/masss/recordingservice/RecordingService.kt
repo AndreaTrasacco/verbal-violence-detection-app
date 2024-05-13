@@ -77,7 +77,7 @@ class RecordingService : Service() {
     fun stopRecording(alert: Boolean = false) {
         Log.d( // TODO rimuovere
             "RS",
-            "Stop recording"
+            "Stop recording: $alert"
         )
         if (this.isServiceRunning(this::class.java)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -97,7 +97,7 @@ class RecordingService : Service() {
         private var wavRecorder: WavRecorder? = null
 
         companion object {
-            const val AMPLITUDE_THRESHOLD: Int = 60
+            const val AMPLITUDE_THRESHOLD: Int = 30
             const val CHECK_AMPLITUDE_SECONDS: Long = 2
             const val RECORDING_FOR_ML_SECONDS: Long = 10
 
