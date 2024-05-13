@@ -52,6 +52,13 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".SendAlertReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="SEND_ALERT"/>
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".TopicSubscriber"
             android:exported="false">

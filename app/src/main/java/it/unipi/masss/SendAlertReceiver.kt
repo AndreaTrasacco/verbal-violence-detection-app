@@ -24,13 +24,15 @@ class SendAlertReceiver : BroadcastReceiver() {
     val apiUrl = "http://127.0.0.1:5001/protectronserver/us-central1/alert"
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        /*if (intent?.action == "ACTION_ABORT") {
+        if (intent?.action == "ACTION_ABORT") {
             countDownTimer?.cancel()
             if (context == null) return
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-        } else {
+            Log.d("DEBUG", "Send alert aborted")
+        }
+        else {
             if (context?.isServiceRunning(RecordingService::class.java)!!) {
                 Intent(context.applicationContext, ShakingDetector::class.java).also {
                     it.action = Action.STOP_SHAKING_DETECTION.toString()
@@ -50,14 +52,14 @@ class SendAlertReceiver : BroadcastReceiver() {
                 context,
                 0,
                 abortIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
             // build danger alert notification
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_home_black_24dp)
                 .setContentTitle(context.getString(R.string.danger_detected_notification))
-                .setContentText(COUNTDOWN_S.toString() + context.getString(R.string.countdown))
+                .setContentText(COUNTDOWN_S.toString() + " " + context.getString(R.string.countdown))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .addAction(
                     R.drawable.ic_close,
@@ -75,7 +77,7 @@ class SendAlertReceiver : BroadcastReceiver() {
             // Start countdown
             object : CountDownTimer(COUNTDOWN_S.toLong() * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    builder.setContentText("${millisUntilFinished / 1000}" + context.getString(R.string.countdown))
+                    builder.setContentText("${millisUntilFinished / 1000} " + context.getString(R.string.countdown))
 
                     if (checkGenericPermission(context, Manifest.permission.FOREGROUND_SERVICE)) {
                         with(NotificationManagerCompat.from(context)) {
@@ -89,42 +91,26 @@ class SendAlertReceiver : BroadcastReceiver() {
                     with(NotificationManagerCompat.from(context)) {
                         cancel(1)
                     }
-                    val location = LocationHandling.getPreciseLocation(context).get()
-
                     val sharedPreference =  context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
                     val token = sharedPreference.getString("token", "defaultValue")
-                    val postData = "token=" + token +
-                            "lat=" + location?.latitude +
-                            "&long=" + location?.longitude
-                    val responseData = sendPostRequest(apiUrl, postData)
-                    Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
+
+                    LocationHandling.getPreciseLocation(context).thenApply { location ->
+                        if(location == null) {
+                            Log.d("DEBUG", "Cannot fetch user precise location")
+                            return@thenApply
+                        }
+                        else {
+                            Log.d("DEBUG", "Location fetched $location")
+                            val postData = "token=" + token +
+                                    "lat=" + location?.latitude +
+                                    "&long=" + location?.longitude
+                            val responseData = sendPostRequest(apiUrl, postData)
+                            Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
+                        }
+                    }
                 }
             }.start()
-        }*/
-        if (context?.isServiceRunning(ShakingDetector::class.java)!!) {
-            Log.d("SendAlertReceiver", "SEND STOP ShakingDetector")
-            Intent(context.applicationContext, ShakingDetector::class.java).also {
-                it.action = Action.STOP_SHAKING_DETECTION.toString()
-                context.applicationContext?.startService(it)
-            }
         }
-        if (context.isServiceRunning(RecordingService::class.java)) {
-            Log.d("SendAlertReceiver", "SEND STOP RecordingService")
-            Intent(context.applicationContext, RecordingService::class.java).also {
-                it.action = Action.STOP_RECORDING.toString()
-                context.applicationContext?.startService(it)
-            }
-        }
-        Log.d("SendAlertReceiver", "SEND ALERT")
-        val location = LocationHandling.getPreciseLocation(context).get()
-
-        val sharedPreference =  context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
-        val token = sharedPreference.getString("token", "defaultValue")
-        val postData = "token=" + token +
-                "lat=" + location?.latitude +
-                "&long=" + location?.longitude
-        val responseData = sendPostRequest(apiUrl, postData)
-        Log.d(SendAlertReceiver::class.java.simpleName, "Response: $responseData")
     }
 
     private fun sendPostRequest(urlString: String, postData: String): String {

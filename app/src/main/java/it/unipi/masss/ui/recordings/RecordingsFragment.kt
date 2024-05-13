@@ -1,22 +1,25 @@
 package it.unipi.masss.ui.recordings
 
+import AudioItem
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import it.unipi.masss.MainActivity
+import it.unipi.masss.R
+import it.unipi.masss.SendAlertReceiver
 import it.unipi.masss.databinding.FragmentRecordingsBinding
 import java.io.File
-import AudioItem
-import android.icu.text.SimpleDateFormat
-
-import android.media.MediaPlayer
-import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import it.unipi.masss.R
 import java.util.Date
 import java.util.Locale
 
