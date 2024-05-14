@@ -48,19 +48,21 @@ class ShakingDetector : Service() {
                 val sum =
                     (abs(xAccl.toDouble()) + abs(yAccl.toDouble()) + abs(zAccl.toDouble())).toFloat()
 
-                if (sum > 40) { // TODO DEBUG SHAKING LOGIC
-                    Log.d("ShakingDetector", "Detected shaking of: $sum")
+                if (sum > 40) {
                     if (System.currentTimeMillis() - lastUpdateOfNumTimes < MS_BETWEEN_NUM_TIMES) {
                         lastUpdateOfNumTimes = System.currentTimeMillis()
                         numTimes++
-                    } else
+                    } else {
+                        lastUpdateOfNumTimes = System.currentTimeMillis()
                         numTimes = 0
+                    }
                     if (numTimes >= SHAKING_DETECTIONS_THRESHOLD) {
                         numTimes = 0
+                        Log.d(this::class.java.simpleName, "Send alert!")
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
+                        stopShakingDetection()
                     }
                 }
-                //Log.d("ShakingDetector", "Sensor Changed $sum")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, i: Int) {

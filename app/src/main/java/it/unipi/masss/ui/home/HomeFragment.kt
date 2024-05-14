@@ -25,6 +25,7 @@ import it.unipi.masss.R
 import it.unipi.masss.ShakingDetector
 import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.databinding.FragmentHomeBinding
+import it.unipi.masss.firebase.OnAlertReceivedService
 import it.unipi.masss.recordingservice.RecordingService
 
 class HomeFragment : Fragment() {

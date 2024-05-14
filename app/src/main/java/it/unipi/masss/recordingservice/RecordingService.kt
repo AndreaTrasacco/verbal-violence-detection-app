@@ -89,18 +89,19 @@ class RecordingService : Service() {
     @RequiresApi(Build.VERSION_CODES.S)
     class RecorderTask(private val recordingService: RecordingService) : TimerTask() {
         private var wavRecorder: WavRecorder? = null
+        private var isCanceled = false;
 
         companion object {
-            const val AMPLITUDE_THRESHOLD: Int = 30
+            const val AMPLITUDE_THRESHOLD: Int = 100
             const val CHECK_AMPLITUDE_SECONDS: Long = 2
             const val RECORDING_FOR_ML_SECONDS: Long = 10
 
         }
 
         override fun cancel(): Boolean {
-            val retValue = super.cancel()
+            isCanceled = super.cancel()
             wavRecorder?.stopRecording()
-            return retValue
+            return isCanceled
         }
 
         override fun run() {
@@ -117,7 +118,7 @@ class RecordingService : Service() {
                     wavRecorder?.stopRecording()
                     if (amplitude > AMPLITUDE_THRESHOLD) {
                         Log.d(
-                            RecorderTask::class.java.name,
+                            this::class.java.name,
                             "Start recording for subsequent detection"
                         )
                         val outputFile = "recording_" + System.currentTimeMillis() + ".wav"
@@ -129,8 +130,9 @@ class RecordingService : Service() {
                                     recordingService,
                                     recordingService.filesDir.path + '/' + outputFile
                                 )
-                                if (violentRecording)
+                                if (violentRecording && !isCanceled) {
                                     recordingService.stopRecording(true)
+                                }
                                 else {
                                     val fileDelete =
                                         File(recordingService.filesDir.path + '/' + outputFile)
