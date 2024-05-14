@@ -27,7 +27,7 @@ class SendAlertReceiver : BroadcastReceiver() {
     private var countDownTimer: CountDownTimer? = null
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == "ACTION_ABORT") {
+        if (intent?.action == Action.ACTION_ABORT.toString()) {
             Log.d("DEBUG", "Deleting the notification")
             countDownTimer?.cancel()
             if (context == null) return
@@ -49,7 +49,7 @@ class SendAlertReceiver : BroadcastReceiver() {
                 }
             }
             // intent to cancel count down
-            val abortIntent = Intent("ACTION_ABORT")
+            val abortIntent = Intent(Action.ACTION_ABORT.toString())
             val abortPendingIntent = PendingIntent.getBroadcast(
                 context,
                 0,
@@ -62,11 +62,8 @@ class SendAlertReceiver : BroadcastReceiver() {
                 .setSmallIcon(R.drawable.ic_home_black_24dp)
                 .setContentTitle(context.getString(R.string.danger_detected_notification))
                 .setContentText(COUNTDOWN_S.toString() + " " + context.getString(R.string.countdown))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .addAction(
-                    R.drawable.ic_close,
-                    context.getString(R.string.abort),
-                    abortPendingIntent
+                .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(
+                    R.drawable.ic_close, context.getString(R.string.abort), abortPendingIntent
                 )
 
             // notify user
@@ -82,10 +79,8 @@ class SendAlertReceiver : BroadcastReceiver() {
     }
 
     class AlertNotificationTimer(
-        private val builder: NotificationCompat.Builder,
-        val context: Context
-    ) :
-        CountDownTimer(COUNTDOWN_S.toLong() * 1000, 1000) {
+        private val builder: NotificationCompat.Builder, val context: Context
+    ) : CountDownTimer(COUNTDOWN_S.toLong() * 1000, 1000) {
 
         private val apiUrl = "https://us-central1-protectronserver.cloudfunctions.net/alert"
         override fun onTick(millisUntilFinished: Long) {
@@ -112,9 +107,8 @@ class SendAlertReceiver : BroadcastReceiver() {
                     return@thenApply
                 } else {
                     Log.d("DEBUG", "Location fetched $location")
-                    val postData = "token=" + token +
-                            "&lat=" + location.latitude +
-                            "&long=" + location.longitude
+                    val postData =
+                        "token=" + token + "&lat=" + location.latitude + "&long=" + location.longitude
                     Log.d("DEBUG", postData)
                     sendPostRequest(apiUrl, postData)
                 }
@@ -122,15 +116,10 @@ class SendAlertReceiver : BroadcastReceiver() {
         }
 
         private fun sendPostRequest(urlString: String, postData: String) {
-            val payload = postData
-
             val okHttpClient = OkHttpClient()
-            val requestBody = payload.toRequestBody("text/plain".toMediaType())
+            val requestBody = postData.toRequestBody("text/plain".toMediaType())
             Log.d("SendAlertReceiver", "" + requestBody)
-            val request = Request.Builder()
-                .post(requestBody)
-                .url(urlString)
-                .build()
+            val request = Request.Builder().post(requestBody).url(urlString).build()
 
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {

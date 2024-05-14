@@ -1,9 +1,6 @@
 package it.unipi.masss.ui.recordings
 
 import AudioItem
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
-import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -15,9 +12,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import it.unipi.masss.MainActivity
 import it.unipi.masss.R
-import it.unipi.masss.SendAlertReceiver
 import it.unipi.masss.databinding.FragmentRecordingsBinding
 import java.io.File
 import java.util.Date
@@ -45,11 +40,11 @@ class RecordingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val audio_path = context?.filesDir?.path + "/"
-        Log.d("Recordings", "audiopath: $audio_path")
+        val audioPath = context?.filesDir?.path + "/"
+        Log.d("Recordings", "audio path: $audioPath")
 
 
-        val directory = File(audio_path)
+        val directory = File(audioPath)
         val audioListLayout = view.findViewById<LinearLayout>(R.id.audioList)
         val scrollViewLayout = view.findViewById<ScrollView>(R.id.scrollPage)
         val audioItems = mutableMapOf<String, AudioItem>()
@@ -88,7 +83,7 @@ class RecordingsFragment : Fragment() {
                     if(currentlyPlaying != file.name){
                         // Otherwise, start playing the audio
                         mediaPlayer = MediaPlayer().apply {
-                            setDataSource(audio_path + file.name)
+                            setDataSource(audioPath + file.name)
                             prepare()
                             start()
 
@@ -101,9 +96,8 @@ class RecordingsFragment : Fragment() {
                         }
                         currentlyPlaying = file.name
 
-                        Log.d("Recordings", "PEFFORZA")
-                        val my_id = file.name.hashCode()
-                        Log.d("Recordings", "id: $my_id")
+                        val myId = file.name.hashCode()
+                        Log.d("Recordings", "id: $myId")
 
 
                         val currentAudioItem = audioItems[file.name]
@@ -111,7 +105,7 @@ class RecordingsFragment : Fragment() {
 
                         val playButton = currentAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
 
-                        Log.d("Recordings", "PLAYBUTTON : $playButton")
+                        Log.d("Recordings", "PLAY BUTTON : $playButton")
                         playButton?.setImageResource(android.R.drawable.ic_media_pause)
                     }
                 }

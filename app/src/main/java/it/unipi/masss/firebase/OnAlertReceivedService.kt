@@ -10,25 +10,13 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.google.firebase.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.messaging
 import it.unipi.masss.LocationHandling
-import it.unipi.masss.MainActivity
 import it.unipi.masss.R
-import it.unipi.masss.SendAlertReceiver
-import java.util.Locale
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
 
 
 class OnAlertReceivedService : FirebaseMessagingService() {
-
-    override fun onCreate() {
-        super.onCreate()
-    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
@@ -40,11 +28,11 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             // check if I sent the alert
             val sharedPreference = getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
-            if (token.equals(remoteMessage.data.get("token"))) return
+            if (token.equals(remoteMessage.data["token"])) return
 
             // Get location from message payload
-            val lat = remoteMessage.data.get("lat")
-            val long = remoteMessage.data.get("long")
+            val lat = remoteMessage.data["lat"]
+            val long = remoteMessage.data["long"]
 
             // Compute distance
             val personInDangerLocation = Location("") //provider name is unnecessary
@@ -62,14 +50,13 @@ class OnAlertReceivedService : FirebaseMessagingService() {
                         TAG,
                         dis.toString()
                     )
-                    if (dis <= THRESHOLD) {
+                    if (dis <= ALERT_RANGE_THRESHOLD) { // TODO CALL "openMaps"
                         // it also open maps
                         showNotification("Someone is in danger! Click to locate",
                             lat.toDouble(), long.toDouble())
                     }
                 }
             }
-
         }
     }
 
@@ -119,6 +106,6 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "FirebaseNotificationService"
-        private const val THRESHOLD = 100000.0 // TODO settare
+        private const val ALERT_RANGE_THRESHOLD = 500.0 // Range in meters
     }
 }

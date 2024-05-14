@@ -12,11 +12,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.ktx.messaging
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.databinding.ActivityMainBinding

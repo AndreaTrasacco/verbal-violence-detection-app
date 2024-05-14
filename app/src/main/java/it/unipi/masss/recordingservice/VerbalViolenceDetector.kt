@@ -20,7 +20,7 @@ object VerbalViolenceDetector {
 
     fun classify(recordingService: RecordingService, path: String): Boolean {
         if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(recordingService));
+            Python.start(AndroidPlatform(recordingService))
         }
         val audioFeatures = extractFeatures(path)
         val model = AudioModel.newInstance(recordingService)

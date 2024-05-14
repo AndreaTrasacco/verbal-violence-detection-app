@@ -16,12 +16,12 @@ import kotlin.math.abs
 
 class ShakingDetector : Service() {
     private lateinit var sensorEventListener: SensorEventListener
-    private var numTimes : Int = 0
-    private var lastUpdateOfNumTimes : Long = System.currentTimeMillis()
+    private var numTimes: Int = 0
+    private var lastUpdateOfNumTimes: Long = System.currentTimeMillis()
 
     companion object {
         const val SHAKING_DETECTIONS_THRESHOLD = 5
-        const val MS_BETWEEN_NUM_TIMES : Long = 2000
+        const val MS_BETWEEN_NUM_TIMES: Long = 2000
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -48,16 +48,15 @@ class ShakingDetector : Service() {
                 val sum =
                     (abs(xAccl.toDouble()) + abs(yAccl.toDouble()) + abs(zAccl.toDouble())).toFloat()
 
-                if (sum > 40) {
+                if (sum > 40) { // TODO DEBUG SHAKING LOGIC
                     Log.d("ShakingDetector", "Detected shaking of: $sum")
-                    if(System.currentTimeMillis() - lastUpdateOfNumTimes < MS_BETWEEN_NUM_TIMES){
+                    if (System.currentTimeMillis() - lastUpdateOfNumTimes < MS_BETWEEN_NUM_TIMES) {
                         lastUpdateOfNumTimes = System.currentTimeMillis()
                         numTimes++
                     } else
                         numTimes = 0
-                    if(numTimes >= SHAKING_DETECTIONS_THRESHOLD)
-                    {
-                        numTimes = 0;
+                    if (numTimes >= SHAKING_DETECTIONS_THRESHOLD) {
+                        numTimes = 0
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                     }
                 }
@@ -94,7 +93,7 @@ class ShakingDetector : Service() {
         startForeground(ProtectronApplication.BG_NOTIF_ID, notification)
     }
 
-    private fun stopShakingDetection(){
+    private fun stopShakingDetection() {
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.unregisterListener(sensorEventListener)
         stopSelf()

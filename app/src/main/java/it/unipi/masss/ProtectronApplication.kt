@@ -12,7 +12,7 @@ class ProtectronApplication : Application() {
     companion object {
         const val BG_NOTIF_ID = 69
         const val CHANNEL_ID = "PROTECTRON"
-        const val CHANNEL_NAME = "Nearby danger finder" // TODO Change Name
+        const val CHANNEL_NAME = "Protectron_channel"
         const val COUNTDOWN_S = 10
     }
 
@@ -31,7 +31,7 @@ class ProtectronApplication : Application() {
         val sendAlertReceiver = SendAlertReceiver()
         val filter = IntentFilter()
         filter.addAction(Action.SEND_ALERT.toString())
-        filter.addAction("ACTION_ABORT")
+        filter.addAction(Action.ACTION_ABORT.toString())
         registerReceiver(sendAlertReceiver, filter, RECEIVER_NOT_EXPORTED)
     }
 }

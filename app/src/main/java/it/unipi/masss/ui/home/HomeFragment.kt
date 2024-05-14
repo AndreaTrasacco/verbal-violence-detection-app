@@ -1,30 +1,30 @@
 package it.unipi.masss.ui.home
 
 import android.Manifest
-import android.app.ActivityManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.BroadcastReceiver
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.telephony.SmsManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import android.telephony.SmsManager
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import android.app.PendingIntent
-import it.unipi.masss.R
-import it.unipi.masss.databinding.FragmentHomeBinding
+import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import it.unipi.masss.Action
 import it.unipi.masss.LocationHandling
+import it.unipi.masss.R
 import it.unipi.masss.ShakingDetector
+import it.unipi.masss.Util.isServiceRunning
+import it.unipi.masss.databinding.FragmentHomeBinding
 import it.unipi.masss.recordingservice.RecordingService
 
 class HomeFragment : Fragment() {
@@ -43,34 +43,26 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
     }
 
-    @Suppress("DEPRECATION")
-    fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
-        return (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
-            .getRunningServices(Integer.MAX_VALUE)
-            .any { it -> it.service.className == service.name }
-    }
-
-
     private fun sendSMS(context: Context, phoneNumber: String, message: String) {
-        val sentPI: PendingIntent = PendingIntent.getBroadcast(context, 0, Intent("SMS_SENT"),
-            PendingIntent.FLAG_IMMUTABLE)
+        val sentPI: PendingIntent = PendingIntent.getBroadcast(
+            context, 0, Intent("SMS_SENT"),
+            PendingIntent.FLAG_IMMUTABLE
+        )
         val smsManager: SmsManager = context.getSystemService(SmsManager::class.java)
         smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null)
     }
-      
- 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val startMonBtn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
-        val manual_sos_btn = view.findViewById<MaterialButton>(R.id.manual_sos_btn)
+        val manualSosBtn = view.findViewById<MaterialButton>(R.id.manual_sos_btn)
 
         val requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -84,7 +76,7 @@ class HomeFragment : Fragment() {
         val hasPermission = ContextCompat.checkSelfPermission(
             requireActivity(),
             Manifest.permission.SEND_SMS
-        )== PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
 
         if (!hasPermission) {
             requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
@@ -97,7 +89,7 @@ class HomeFragment : Fragment() {
 
         startMonBtn.setOnClickListener {
 
-            // detect if the recording service is already running
+            // Detect if the recording service is already running
             if (!requireContext().isServiceRunning(RecordingService::class.java)) {
                 // Start Recording service
                 Intent(context?.applicationContext, RecordingService::class.java).also {
@@ -128,28 +120,30 @@ class HomeFragment : Fragment() {
 
         }
 
-        manual_sos_btn.setOnClickListener {
+        manualSosBtn.setOnClickListener {
+            // TODO SUBSTITUTE NEXT CODE WITH sendBroadcast(Intent(Action.SEND_ALERT.toString()))
+            // TODO PUT CONTACTS ALERTING VIA SMS IN OnAlertReceivedService (Consider logic for sending only to contacts depending on settings)
 
-            var sosMsg: String = "Cannot fetch user precise location"
+            var sosMsg = "Cannot fetch user precise location"
 
             //get location
             LocationHandling.getPreciseLocation(requireContext()).thenApply { location ->
-                if(location == null) {
+                if (location == null) {
                     Log.d("DEBUG", sosMsg)
                     return@thenApply
-                }
-                else {
-                    sosMsg = "http://maps.google.com/maps?q=${location.latitude},${location.longitude}"
+                } else {
+                    sosMsg =
+                        "http://maps.google.com/maps?q=${location.latitude},${location.longitude}"
                 }
             }
 
             // Get all keys from SharedPreferences
-            val sharedPreferences = requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+            val sharedPreferences =
+                requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
             val allKeys = sharedPreferences.all.keys
 
             // Filter the keys that start with "contact_info_"
             val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
-
 
 
             // Iterate over each contact key
@@ -158,7 +152,7 @@ class HomeFragment : Fragment() {
                 val contactInfo = sharedPreferences.getString(key, null)
 
                 // Split the contact info into name and number
-                val (name, number) = contactInfo?.split(",") ?: continue
+                val (_, number) = contactInfo?.split(",") ?: continue
 
                 // Call the sendSMS function
                 sendSMS(requireActivity(), number, sosMsg)
@@ -168,10 +162,13 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().registerReceiver(alertStateReceiver, IntentFilter(Action.SEND_ALERT.toString()))
+        requireActivity().registerReceiver(
+            alertStateReceiver,
+            IntentFilter(Action.SEND_ALERT.toString())
+        )
 
         if (!requireContext().isServiceRunning(RecordingService::class.java))
-            updateButtonColor(true);
+            updateButtonColor(true)
         else
             updateButtonColor()
     }

@@ -1,10 +1,8 @@
 package it.unipi.masss.recordingservice
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.app.TaskStackBuilder
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -75,10 +73,6 @@ class RecordingService : Service() {
     }
 
     fun stopRecording(alert: Boolean = false) {
-        Log.d( // TODO rimuovere
-            "RS",
-            "Stop recording: $alert"
-        )
         if (this.isServiceRunning(this::class.java)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 recorderTask?.cancel()
