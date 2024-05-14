@@ -44,8 +44,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // TODO rimuovere -> solo per DEBUG
-        subscribeTopic()
+        TopicSubscriber.subscribeToTopic(this)
     }
 
     override fun onStart() {
@@ -119,16 +118,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun subscribeTopic() {
-        Firebase.messaging.subscribeToTopic("protectron")
-            .addOnCompleteListener { task ->
-                var msg = "Subscribed"
-                if (!task.isSuccessful) {
-                    msg = "Subscribe failed"
-                }
-            }
     }
 
 }
