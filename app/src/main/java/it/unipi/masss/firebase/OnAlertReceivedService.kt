@@ -26,17 +26,18 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     override fun onCreate() {
         super.onCreate()
     }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
         Log.d(OnAlertReceivedService::class.java.simpleName, remoteMessage.toString())
-        if(remoteMessage.data.isNotEmpty()) {
+        if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: " + remoteMessage.data.toString())
 
             // check if I sent the alert
-            val sharedPreference =  getSharedPreferences("TOKEN",Context.MODE_PRIVATE)
+            val sharedPreference = getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
-            if(token.equals(remoteMessage.data.get("token"))) return
+            if (token.equals(remoteMessage.data.get("token"))) return
 
             // Get location from message payload
             val lat = remoteMessage.data.get("lat")
@@ -50,8 +51,10 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
             if (distance <= THRESHOLD) {
                 // it also open maps
-                showNotification("Someone is in danger! Click to locate",
-                    lat.toDouble(), long.toDouble())
+                showNotification(
+                    "Someone is in danger! Click to locate",
+                    lat.toDouble(), long.toDouble()
+                )
             }
         }
     }
@@ -60,9 +63,9 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
 
         //save the token in a shared preference
-        val sharedPreference =  getSharedPreferences("TOKEN",Context.MODE_PRIVATE)
+        val sharedPreference = getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
-        editor.putString("token",token)
+        editor.putString("token", token)
         editor.apply()
 
     }
@@ -89,7 +92,8 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         val channel = NotificationChannel(

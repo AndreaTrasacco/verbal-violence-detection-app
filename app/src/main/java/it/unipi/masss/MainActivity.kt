@@ -1,25 +1,20 @@
 package it.unipi.masss
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import it.unipi.masss.databinding.ActivityMainBinding
-import it.unipi.masss.Util.isServiceRunning
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.unipi.masss.Util.checkGenericPermission
-import it.unipi.masss.LocationHandling
+import it.unipi.masss.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +49,9 @@ class MainActivity : AppCompatActivity() {
                 this,
                 arrayOf(
                     Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.FOREGROUND_SERVICE_MICROPHONE
+                    Manifest.permission.FOREGROUND_SERVICE_MICROPHONE,
+                    //Manifest.permission.INTERNET,
+                    //Manifest.permission.ACCESS_NETWORK_STATE
                 ),
                 0
             )

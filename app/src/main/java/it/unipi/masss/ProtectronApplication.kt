@@ -12,7 +12,7 @@ class ProtectronApplication : Application() {
     companion object {
         const val BG_NOTIF_ID = 69
         const val CHANNEL_ID = "PROTECTRON"
-        const val CHANNEL_NAME = "Nearby danger finder"
+        const val CHANNEL_NAME = "Nearby danger finder" // TODO Change Name
         const val COUNTDOWN_S = 10
     }
 
