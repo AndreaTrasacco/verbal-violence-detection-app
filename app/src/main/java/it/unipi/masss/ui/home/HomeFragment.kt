@@ -23,6 +23,7 @@ import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentHomeBinding
 import com.google.android.material.button.MaterialButton
 import it.unipi.masss.Action
+import it.unipi.masss.LocationHandling
 import it.unipi.masss.ShakingDetector
 import it.unipi.masss.recordingservice.RecordingService
 
@@ -89,9 +90,6 @@ class HomeFragment : Fragment() {
             requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
         }
 
-        val phoneNumber = "1234567890" // Replace with the phone number you want to send the SMS to
-        val message = "Hello, this is a test message!" // Replace with your message
-      
         if (requireContext().isServiceRunning(RecordingService::class.java))
             updateButtonColor()
         else
@@ -131,12 +129,28 @@ class HomeFragment : Fragment() {
         }
 
         manual_sos_btn.setOnClickListener {
+
+            var sosMsg: String = "Cannot fetch user precise location"
+
+            //get location
+            LocationHandling.getPreciseLocation(requireContext()).thenApply { location ->
+                if(location == null) {
+                    Log.d("DEBUG", sosMsg)
+                    return@thenApply
+                }
+                else {
+                    sosMsg = "http://maps.google.com/maps?q=${location.latitude},${location.longitude}"
+                }
+            }
+
             // Get all keys from SharedPreferences
             val sharedPreferences = requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
             val allKeys = sharedPreferences.all.keys
 
             // Filter the keys that start with "contact_info_"
             val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
+
+
 
             // Iterate over each contact key
             for (key in contactKeys) {
@@ -147,7 +161,7 @@ class HomeFragment : Fragment() {
                 val (name, number) = contactInfo?.split(",") ?: continue
 
                 // Call the sendSMS function
-                sendSMS(requireActivity(), number, "Hello, this is a test message!")
+                sendSMS(requireActivity(), number, sosMsg)
             }
         }
     }
