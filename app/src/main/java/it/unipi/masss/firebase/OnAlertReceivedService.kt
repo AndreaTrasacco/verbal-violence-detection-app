@@ -10,11 +10,14 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.firebase.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.messaging
 import it.unipi.masss.LocationHandling
 import it.unipi.masss.MainActivity
 import it.unipi.masss.R
+import it.unipi.masss.SendAlertReceiver
 import java.util.Locale
 import kotlin.math.acos
 import kotlin.math.cos
@@ -47,15 +50,26 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             val personInDangerLocation = Location("") //provider name is unnecessary
             personInDangerLocation.latitude = lat!!.toDouble()
             personInDangerLocation.longitude = long!!.toDouble()
-            val distance = LocationHandling.distanceFromPersonInDanger(this, personInDangerLocation)
-
-            if (distance <= THRESHOLD) {
-                // it also open maps
-                showNotification(
-                    "Someone is in danger! Click to locate",
-                    lat.toDouble(), long.toDouble()
-                )
+            LocationHandling.getPreciseLocation(this).thenApply { location ->
+                if(location == null) {
+                    Log.d("DEBUG", "Cannot fetch user precise location")
+                    return@thenApply
+                }
+                else {
+                    Log.d("DEBUG", "Location fetched $location")
+                    val dis = location.distanceTo(personInDangerLocation)
+                    Log.d(
+                        TAG,
+                        dis.toString()
+                    )
+                    if (dis <= THRESHOLD) {
+                        // it also open maps
+                        showNotification("Someone is in danger! Click to locate",
+                            lat.toDouble(), long.toDouble())
+                    }
+                }
             }
+
         }
     }
 
@@ -72,15 +86,11 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
     // method to show a notification and open google maps to locate the victim
     private fun showNotification(messageBody: String, lat: Double, long: Double) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val requestCode = 0
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
+        // Creates an Intent that will load the position of the victim
+        val mapsIntent = Intent(Intent.ACTION_VIEW,
+            Uri.parse("geo:$lat,$long"))
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this, 0, mapsIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -105,13 +115,8 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
         val notificationId = 0
         notificationManager.notify(notificationId, notificationBuilder.build())
-
-        // open google maps to show the victim position
-        val uri = java.lang.String.format(Locale.ENGLISH, "geo:%f,%f", lat, long)
-        val mapsIntent = Intent(Intent.ACTION_VIEW)
-        mapsIntent.data = Uri.parse(uri)
-        startActivity(intent)
     }
+
 
     private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val theta = lon1 - lon2

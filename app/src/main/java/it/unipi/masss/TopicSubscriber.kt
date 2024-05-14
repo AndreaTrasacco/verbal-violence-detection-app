@@ -23,6 +23,8 @@ class TopicSubscriber : BroadcastReceiver() {
                     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                 }
 
+
+
         }
         if (Intent.ACTION_SHUTDOWN == intent.action)
             Firebase.messaging.unsubscribeFromTopic("protectron")
