@@ -1,6 +1,7 @@
 package it.unipi.masss.ui.home
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -100,17 +101,21 @@ class HomeFragment : Fragment() {
                     it.action = Action.STOP_SHAKING_DETECTION.toString()
                     context?.applicationContext?.startService(it)
                 }
-
-
                 updateButtonColor(true)
             }
-
         }
 
         manualSosBtn.setOnClickListener {
-            // TODO OPEN POP-UP
-            context?.sendBroadcast(Intent(Action.SEND_ALERT.toString()))
+            AlertDialog.Builder(context)
+                .setTitle("Confirmation")
+                .setMessage("Are you sure?")
+                .setPositiveButton("OK") { _, _ ->
+                    context?.sendBroadcast(Intent(Action.SEND_ALERT.toString()))
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
+
     }
 
     override fun onResume() {
@@ -144,6 +149,8 @@ class HomeFragment : Fragment() {
         requireView().findViewById<MaterialButton>(R.id.start_mon_btn).backgroundTintList =
             colorStateList
     }
+
+
 
     companion object {
         private const val TAG = "HomeFragment"
