@@ -12,25 +12,28 @@ class SosContact : ConstraintLayout {
     private var cancelButton: FloatingActionButton? = null
     private var contactId: Long = 0
 
-    constructor(context: Context, text: String, id: Long) : super(context) {
+    constructor(context: Context, name: String, number: String, id: Long) : super(context) {
         this.contactId = id
-        init(text)
+        init(name, number)
     }
 
-    constructor(context: Context, attrs: AttributeSet, text: String, id: Long) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet, name: String, number: String, id: Long) : super(context, attrs) {
         this.contactId = id
-        init(text)
+        init(name, number)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, text: String, id: Long) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, name: String, number: String, id: Long) : super(context, attrs, defStyleAttr) {
         this.contactId = id
-        init(text)
+        init(name, number)
     }
 
-    private fun init(text: String) {
+    private fun init(name: String, number: String) {
         LayoutInflater.from(context).inflate(R.layout.sos_contact, this, true)
         textView = findViewById(R.id.contactText)
-        textView?.text = text
+        textView?.text = name
+
+        textView = findViewById(R.id.numberText)
+        textView?.text = number
 
         cancelButton = findViewById(R.id.floatingActionButton)
         cancelButton?.setOnClickListener {

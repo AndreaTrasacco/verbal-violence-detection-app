@@ -145,8 +145,15 @@ class SettingsFragment : Fragment() {
 
 
     private fun createContactTextView(id: Long, name: String, number: String, context: Context, contactListLayout: LinearLayout, scrollViewLayout: ScrollView) {
-        val enteredText = "$name - $number"
-        val sosContact = SosContact(context, enteredText, id)
+        val sosContact = SosContact(context, name, number, id)
+
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, // width
+            LinearLayout.LayoutParams.WRAP_CONTENT  // height
+        )
+        params.topMargin = 25  // set top margin here
+        sosContact.layoutParams = params
+
         contactListLayout.addView(sosContact)
         contactListLayout.requestLayout()
         scrollViewLayout.requestLayout()
