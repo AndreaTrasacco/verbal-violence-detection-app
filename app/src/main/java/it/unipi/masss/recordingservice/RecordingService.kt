@@ -89,7 +89,7 @@ class RecordingService : Service() {
         private var isCanceled = false
 
         companion object {
-            const val AMPLITUDE_THRESHOLD: Int = 100
+            const val AMPLITUDE_THRESHOLD: Int = 40
             const val CHECK_AMPLITUDE_SECONDS: Long = 2
             const val RECORDING_FOR_ML_SECONDS: Long = 10
             private const val TAG = "RecorderTask"

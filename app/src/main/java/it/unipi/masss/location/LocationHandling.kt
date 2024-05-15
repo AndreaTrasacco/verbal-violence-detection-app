@@ -1,4 +1,4 @@
-package it.unipi.masss
+package it.unipi.masss.it.unipi.masss.location
 
 import android.Manifest
 import android.content.Context

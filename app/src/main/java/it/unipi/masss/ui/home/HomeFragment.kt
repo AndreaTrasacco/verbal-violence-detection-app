@@ -19,9 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import it.unipi.masss.Action
-import it.unipi.masss.LocationHandling
-import it.unipi.masss.ProtectronApplication
-import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
 import it.unipi.masss.ShakingDetector
 import it.unipi.masss.Util.isServiceRunning

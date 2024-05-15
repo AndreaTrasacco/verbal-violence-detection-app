@@ -15,6 +15,7 @@ class ProtectronApplication : Application() {
         const val CHANNEL_NAME = "PROTECTRON_CHANNEL"
         const val COUNTDOWN_S = 10
         const val SHARED_PREF = "PROTECTRON_SP"
+        const val ALERT_RANGE_THRESHOLD = 100000.0 // Range in meters
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

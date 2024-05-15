@@ -11,10 +11,11 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import it.unipi.masss.LocationHandling
 import it.unipi.masss.ProtectronApplication
+import it.unipi.masss.ProtectronApplication.Companion.ALERT_RANGE_THRESHOLD
 import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
+import it.unipi.masss.location.LocationRetriever
 
 
 class OnAlertReceivedService : FirebaseMessagingService() {
@@ -38,10 +39,10 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             val personInDangerLocation = Location("") //provider name is unnecessary
             personInDangerLocation.latitude = lat!!.toDouble()
             personInDangerLocation.longitude = long!!.toDouble()
-            LocationHandling.getPreciseLocation(this).thenApply { location ->
+
+            LocationRetriever.getPreciseLocation(applicationContext).thenApply { location ->
                 if(location == null) {
                     Log.d(TAG, "Cannot fetch user precise location")
-                    return@thenApply
                 }
                 else {
                     Log.d(TAG, "Location fetched $location")
@@ -54,6 +55,9 @@ class OnAlertReceivedService : FirebaseMessagingService() {
                         // it also open maps
                         showNotification("Someone is in danger!",
                             lat.toDouble(), long.toDouble())
+                    }
+                    else {
+
                     }
                 }
             }
@@ -98,6 +102,5 @@ class OnAlertReceivedService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "OnAlertReceivedService"
-        private const val ALERT_RANGE_THRESHOLD = 100000.0 // Range in meters
     }
 }
