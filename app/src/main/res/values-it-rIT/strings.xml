@@ -14,6 +14,7 @@
 
     <string name="cancel">Rimuovi</string>
     <string name="abort">Annulla</string>
+    <string name="open_maps">Apri Mappe</string>
     <string name="countdown"> secondi rimanenti…</string>
 
     <string name="welcome_msg_loc">Questa app ha bisogno di accedere alla posizione in tempo reale dell\'utente per funzionare, per favore conceda il permesso e selezioni "Consenti sempre"</string>
@@ -24,4 +25,5 @@
     <string name="sends_manual_sos">Invia SOS manuale</string>
     <string name="play_audio">Riproduci audio</string>
     <string name="closeaudio">Chiudi audio</string>
+    <string name="delete_audio">Elimina audio</string>
 </resources>
