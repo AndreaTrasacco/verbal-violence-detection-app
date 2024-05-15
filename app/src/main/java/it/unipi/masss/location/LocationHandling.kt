@@ -1,4 +1,4 @@
-package it.unipi.masss.it.unipi.masss.location
+package it.unipi.masss.location
 
 import android.Manifest
 import android.content.Context
@@ -50,6 +50,6 @@ object LocationHandling {
         return futureLocation
     }
 
-    val TAG = "LocationHandling"
+    const val TAG = "LocationHandling"
 
 }

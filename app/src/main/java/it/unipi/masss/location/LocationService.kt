@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import it.unipi.masss.it.unipi.masss.location.LocationHandling
 import it.unipi.masss.ProtectronApplication.Companion.CHANNEL_NAME
 import it.unipi.masss.R
 import java.util.concurrent.CompletableFuture

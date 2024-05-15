@@ -29,7 +29,7 @@ object LocationRetriever {
                     .addOnSuccessListener { location: Location? ->
                         futureLocation.complete(location)
                     }
-                    .addOnFailureListener { e: Exception ->
+                    .addOnFailureListener { _: Exception ->
                         Log.d("DEBUG", "Error trying to get last GPS location")
                         futureLocation.complete(null)
                     }
