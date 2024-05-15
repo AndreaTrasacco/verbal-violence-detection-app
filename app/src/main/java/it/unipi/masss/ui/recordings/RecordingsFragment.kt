@@ -100,19 +100,12 @@ class RecordingsFragment : Fragment() {
                             }
                         }
                         currentlyPlaying = file.name
-
-                        Log.d("Recordings", "PEFFORZA")
-                        val my_id = file.name.hashCode()
-                        Log.d("Recordings", "id: $my_id")
-
-
                         val currentAudioItem = audioItems[file.name]
-                        Log.d("Recordings", "currentAudioItem: $currentAudioItem")
-
                         val playButton = currentAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
-
-                        Log.d("Recordings", "PLAYBUTTON : $playButton")
                         playButton?.setImageResource(android.R.drawable.ic_media_pause)
+                    }
+                    else{
+                        currentlyPlaying = null
                     }
                 }
             }

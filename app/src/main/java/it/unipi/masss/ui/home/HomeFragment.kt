@@ -150,8 +150,6 @@ class HomeFragment : Fragment() {
             // Filter the keys that start with "contact_info_"
             val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
 
-
-
             // Iterate over each contact key
             for (key in contactKeys) {
                 // Get the contact info from SharedPreferences
