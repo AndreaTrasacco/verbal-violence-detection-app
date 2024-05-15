@@ -1,19 +1,20 @@
 <resources>
-    <string name="app_name">Protectron</string>
-    <string name="title_home">Home</string>
+    <string name="app_name" translatable="false">Protectron</string>
+    <string name="title_home" translatable="false">Home</string>
     <string name="title_recordings">Recordings</string>
     <string name="title_settings">Settings</string>
     <string name="recording_service_btn_desc">Start the background service to monitor conversations</string>
 
     <string name="title_auto_mon">AUTOMATIC BACKGROUND MONITORING</string>
     <string name="auto_mon_btn">Enable automatic conversation monitoring</string>
+    <string name="live_mon_title">Live monitoring</string>
+    <string name="click_to_open_app">Click to open the app</string>
 
     <string name="title_alert_options">ALERT OPTIONS</string>
     <string name="close_contact_option">Alert people close to your location</string>
-    <string name="specific_contact_option">Alert chosen contacts</string>
-    <string name="insert_contact">Insert contact</string>
+    <string name="emergency_contact">ADD EMERGENCY CONTACT</string>
 
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancel</string>
     <string name="abort">Abort</string>
     <string name="countdown"> seconds remaining…</string>

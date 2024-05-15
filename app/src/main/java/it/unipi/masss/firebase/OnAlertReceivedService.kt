@@ -13,6 +13,8 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import it.unipi.masss.LocationHandling
+import it.unipi.masss.ProtectronApplication
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
 
 
@@ -26,7 +28,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             Log.d(TAG, "Data Payload: " + remoteMessage.data.toString())
 
             // check if I sent the alert
-            val sharedPreference = getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+            val sharedPreference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
             if (token.equals(remoteMessage.data["token"])) return
 
@@ -64,7 +66,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
 
         //save the token in a shared preference
-        val sharedPreference = getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+        val sharedPreference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putString("token", token)
         editor.apply()

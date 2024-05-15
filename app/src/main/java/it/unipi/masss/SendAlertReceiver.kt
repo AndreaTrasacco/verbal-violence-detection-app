@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.unipi.masss.ProtectronApplication.Companion.CHANNEL_ID
 import it.unipi.masss.ProtectronApplication.Companion.COUNTDOWN_S
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.recordingservice.RecordingService
@@ -98,7 +99,7 @@ class SendAlertReceiver : BroadcastReceiver() {
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-            val sharedPreference = context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+            val sharedPreference = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
 
             LocationHandling.getPreciseLocation(context).thenApply { location ->
