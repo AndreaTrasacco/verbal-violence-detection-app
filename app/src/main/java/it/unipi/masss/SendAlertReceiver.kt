@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.unipi.masss.ProtectronApplication.Companion.CHANNEL_ID
 import it.unipi.masss.ProtectronApplication.Companion.COUNTDOWN_S
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.recordingservice.RecordingService
@@ -100,6 +101,7 @@ class SendAlertReceiver : BroadcastReceiver() {
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
+
             LocationHandling.getPreciseLocation(context).thenApply { location ->
                 if (location == null) {
                     Log.d(TAG, "Cannot fetch user precise location")
@@ -119,7 +121,7 @@ class SendAlertReceiver : BroadcastReceiver() {
 
             // Get all keys from SharedPreferences
             val sharedPreferences =
-                context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+                context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val allKeys = sharedPreferences.all.keys
             val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
 

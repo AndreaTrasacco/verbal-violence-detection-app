@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import it.unipi.masss.ProtectronApplication
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
 
 class SosContact : ConstraintLayout {
@@ -38,7 +40,7 @@ class SosContact : ConstraintLayout {
             (parent as? ViewGroup)?.removeView(this)
 
             // Remove the corresponding contact info from SharedPreferences
-            val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+            val sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.remove("contact_info_$contactId")
             editor.apply()

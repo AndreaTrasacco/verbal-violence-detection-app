@@ -58,8 +58,8 @@ class RecordingService : Service() {
         // Create the persistent notification
         notificationBuilder = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Live Monitoring")
-            .setContentText("Click to open the app")
+            .setContentTitle(getString(R.string.live_mon_title))
+            .setContentText(getString(R.string.click_to_open_app))
             .setContentIntent(resultPendingIntent)
             .setOnlyAlertOnce(true)
         startForeground(ProtectronApplication.BG_NOTIF_ID, notificationBuilder.build())
