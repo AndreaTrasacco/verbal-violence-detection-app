@@ -3,9 +3,14 @@ package it.unipi.masss.ui.recordings
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import it.unipi.masss.R
+import java.io.File
 
 class AudioItem : ConstraintLayout {
     private var textView: TextView? = null
@@ -33,4 +38,21 @@ class AudioItem : ConstraintLayout {
 
         this.id = id.hashCode()
     }
+
+
+    fun onDeleteButtonClick(view: View, audioPath: String, audioListLayout: LinearLayout, scrollViewLayout: ScrollView) {
+        // Remove the AudioItem from the layout
+        (parent as? ViewGroup)?.removeView(this)
+
+        // Delete the associated file
+        val fileToDelete = File(audioPath + contactId)
+        if (fileToDelete.exists()) {
+            fileToDelete.delete()
+        }
+
+        // Request layout for audioListLayout and scrollViewLayout
+        audioListLayout.requestLayout()
+        scrollViewLayout.requestLayout()
+    }
 }
+

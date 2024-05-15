@@ -28,4 +28,5 @@
     <string name="sends_manual_sos">Sends manual SOS</string>
     <string name="closeaudio">CloseAudio</string>
     <string name="play_audio">playaudio</string>
+    <string name="delete_audio">delete audio</string>
 </resources>

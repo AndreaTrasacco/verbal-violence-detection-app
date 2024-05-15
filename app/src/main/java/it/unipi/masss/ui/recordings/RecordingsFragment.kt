@@ -62,11 +62,23 @@ class RecordingsFragment : Fragment() {
                 val dateString = sdf.format(date)
 
                 val audioItem = AudioItem(requireContext(), dateString, file.name)
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, // width
+                    LinearLayout.LayoutParams.WRAP_CONTENT  // height
+                )
+                params.topMargin = 25  // set top margin here
+                audioItem.layoutParams = params
+
                 audioListLayout.addView(audioItem)
                 audioListLayout.requestLayout()
                 scrollViewLayout.requestLayout()
 
                 audioItems[file.name] = audioItem
+
+                audioItem.findViewById<FloatingActionButton>(R.id.deleteButton).setOnClickListener { view ->
+                    audioItem.onDeleteButtonClick(view, audioPath, audioListLayout, scrollViewLayout)
+                }
 
                 audioItem.findViewById<FloatingActionButton>(R.id.playButton).setOnClickListener {
                     // If the audio is playing, stop it
