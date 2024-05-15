@@ -54,9 +54,9 @@ class HomeFragment : Fragment() {
         val requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
                 if (isGranted) {
-                    Log.i("Example", "Permission is granted")
+                    Log.i(TAG, "Permission is granted")
                 } else {
-                    Log.i("Example", "Permission not granted")
+                    Log.i(TAG, "Permission not granted")
                 }
             }
 
@@ -143,5 +143,9 @@ class HomeFragment : Fragment() {
             ColorStateList.valueOf(Color.parseColor("#470000"))
         requireView().findViewById<MaterialButton>(R.id.start_mon_btn).backgroundTintList =
             colorStateList
+    }
+
+    companion object {
+        private const val TAG = "HomeFragment"
     }
 }

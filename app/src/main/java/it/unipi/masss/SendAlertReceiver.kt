@@ -31,13 +31,12 @@ class SendAlertReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Action.ACTION_ABORT.toString()) {
-            Log.d("DEBUG", "Deleting the notification")
+            Log.d(TAG, "Action aborted, don't send the alert")
             countDownTimer?.cancel()
             if (context == null) return
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-            Log.d("DEBUG", "Send alert aborted")
         } else {
             if (context?.isServiceRunning(ShakingDetector::class.java)!!) {
                 Intent(context.applicationContext, ShakingDetector::class.java).also {
@@ -103,7 +102,7 @@ class SendAlertReceiver : BroadcastReceiver() {
             }
             LocationHandling.getPreciseLocation(context).thenApply { location ->
                 if (location == null) {
-                    Log.d("DEBUG", "Cannot fetch user precise location")
+                    Log.d(TAG, "Cannot fetch user precise location")
                     return@thenApply
                 } else {
                     Log.d(this::class.java.simpleName, "Location fetched $location")
@@ -156,13 +155,21 @@ class SendAlertReceiver : BroadcastReceiver() {
 
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.d(SendAlertReceiver::class.java.simpleName, "${e.message}")
+                    Log.d(TAG, "${e.message}")
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    Log.d(SendAlertReceiver::class.java.simpleName, "Response: ${response.code}")
+                    Log.d(TAG, "Response: ${response.code}")
                 }
             })
         }
+
+        companion object {
+            private const val TAG = "AlertNotificationTimer"
+        }
+    }
+
+    companion object {
+        private const val TAG = "SendAlertReceiver"
     }
 }

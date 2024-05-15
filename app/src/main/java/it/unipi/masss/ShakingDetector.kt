@@ -22,6 +22,7 @@ class ShakingDetector : Service() {
     companion object {
         const val SHAKING_DETECTIONS_THRESHOLD = 5
         const val MS_BETWEEN_NUM_TIMES: Long = 2000
+        private const val TAG = "ShakingDetector"
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -58,7 +59,7 @@ class ShakingDetector : Service() {
                     }
                     if (numTimes >= SHAKING_DETECTIONS_THRESHOLD) {
                         numTimes = 0
-                        Log.d(this::class.java.simpleName, "Send alert!")
+                        Log.d(TAG, "Shaking detected, send alert!")
                         sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                         stopShakingDetection()
                     }

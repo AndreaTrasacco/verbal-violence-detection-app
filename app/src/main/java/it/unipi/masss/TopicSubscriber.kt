@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 
 object TopicSubscriber {
+    private const val TAG = "TopicSubscriber"
     fun subscribeToTopic(context: Context) {
         var sharedPreference = context.getSharedPreferences("SUBSCRIBED", Context.MODE_PRIVATE)
         val subscribed = sharedPreference.getBoolean("subscribed", false)
@@ -16,7 +17,7 @@ object TopicSubscriber {
                     if (!task.isSuccessful) {
                         msg = "Subscribe failed"
                     }
-                    Log.d(TopicSubscriber::class.java.simpleName, msg)
+                    Log.d(TAG, msg)
                 }
 
             sharedPreference = context.getSharedPreferences("SUBSCRIBED", Context.MODE_PRIVATE)
