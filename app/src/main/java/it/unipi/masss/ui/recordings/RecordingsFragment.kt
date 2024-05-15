@@ -1,6 +1,5 @@
 package it.unipi.masss.ui.recordings
 
-import AudioItem
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle

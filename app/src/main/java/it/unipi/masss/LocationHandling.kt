@@ -12,13 +12,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import java.util.concurrent.CompletableFuture
 import it.unipi.masss.Util.checkGenericPermission
+import java.util.concurrent.CompletableFuture
 
 object LocationHandling {
 
     fun getPreciseLocation(context: Context): CompletableFuture<Location?> {
-
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         val futureLocation = CompletableFuture<Location?>()
         val fusLocClient = LocationServices.getFusedLocationProviderClient(context)

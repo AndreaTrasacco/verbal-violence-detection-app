@@ -44,10 +44,6 @@ class RecordingService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun startRecording() {
         // Create PendingIntent for starting MainActivity when notification is clicked
         val resultIntent = Intent(this, MainActivity::class.java)
@@ -89,7 +85,7 @@ class RecordingService : Service() {
     @RequiresApi(Build.VERSION_CODES.S)
     class RecorderTask(private val recordingService: RecordingService) : TimerTask() {
         private var wavRecorder: WavRecorder? = null
-        private var isCanceled = false;
+        private var isCanceled = false
 
         companion object {
             const val AMPLITUDE_THRESHOLD: Int = 100

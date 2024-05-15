@@ -45,8 +45,8 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val settingsPreferences = SettingsPreferences(requireContext())
 
-        val auto_mon_sw = view.findViewById<SwitchMaterial>(R.id.auto_mon_sw)
-        val close_contact_opt = view.findViewById<CheckBox>(R.id.close_contact_opt)
+        val autoMonSw = view.findViewById<SwitchMaterial>(R.id.auto_mon_sw)
+        val closeContactOpt = view.findViewById<CheckBox>(R.id.close_contact_opt)
         val submitButton = view.findViewById<TextView>(R.id.submit_button)
         val contactListLayout = view.findViewById<LinearLayout>(R.id.contactList)
         val scrollViewLayout = view.findViewById<ScrollView>(R.id.scrollPage)
@@ -132,13 +132,13 @@ class SettingsFragment : Fragment() {
         }
 
         // Load state of switch and checkboxes, set listeners to trigger updates
-        auto_mon_sw.isChecked = settingsPreferences.getAutoMonState()
-        auto_mon_sw.setOnCheckedChangeListener { _, isChecked ->
+        autoMonSw.isChecked = settingsPreferences.getAutoMonState()
+        autoMonSw.setOnCheckedChangeListener { _, isChecked ->
             settingsPreferences.setAutoMonState(isChecked)
         }
 
-        close_contact_opt.isChecked = settingsPreferences.getCloseContactOptionState()
-        close_contact_opt.setOnCheckedChangeListener { _, isChecked ->
+        closeContactOpt.isChecked = settingsPreferences.getCloseContactOptionState()
+        closeContactOpt.setOnCheckedChangeListener { _, isChecked ->
             settingsPreferences.setCloseContactOptionState(isChecked)
         }
     }

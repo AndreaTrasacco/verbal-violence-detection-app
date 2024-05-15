@@ -5,7 +5,9 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.CountDownTimer
+import android.telephony.SmsManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -14,6 +16,7 @@ import it.unipi.masss.ProtectronApplication.Companion.COUNTDOWN_S
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.Util.isServiceRunning
 import it.unipi.masss.recordingservice.RecordingService
+import it.unipi.masss.ui.settings.SettingsPreferences
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -98,27 +101,57 @@ class SendAlertReceiver : BroadcastReceiver() {
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-            val sharedPreference = context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
-            val token = sharedPreference.getString("token", "defaultValue")
-
             LocationHandling.getPreciseLocation(context).thenApply { location ->
                 if (location == null) {
                     Log.d("DEBUG", "Cannot fetch user precise location")
                     return@thenApply
                 } else {
-                    Log.d("DEBUG", "Location fetched $location")
-                    val postData =
-                        "token=" + token + "&lat=" + location.latitude + "&long=" + location.longitude
-                    Log.d("DEBUG", postData)
-                    sendPostRequest(apiUrl, postData)
+                    Log.d(this::class.java.simpleName, "Location fetched $location")
+                    alertContacts(location)
+                    if(SettingsPreferences(context).getCloseContactOptionState())
+                        alertNearby(location)
                 }
             }
+        }
+
+        private fun alertContacts(location : Location) {
+            val sosMsg = "[Protectron Automatic Message] I am in danger! Help me! I am here: " +
+                "http://maps.google.com/maps?q=${location.latitude},${location.longitude}"
+
+            // Get all keys from SharedPreferences
+            val sharedPreferences =
+                context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+            val allKeys = sharedPreferences.all.keys
+            val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
+
+            // Iterate over each contact key
+            for (key in contactKeys) {
+                val contactInfo = sharedPreferences.getString(key, null)
+                val (_, number) = contactInfo?.split(",") ?: continue
+                sendSMS(context, number, sosMsg)
+            }
+        }
+
+        private fun sendSMS(context: Context, phoneNumber: String, message: String) {
+            val sentPI: PendingIntent = PendingIntent.getBroadcast(
+                context, 0, Intent("SMS_SENT"),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+            val smsManager: SmsManager = context.getSystemService(SmsManager::class.java)
+            smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null)
+        }
+
+        private fun alertNearby(location : Location) {
+            val sharedPreference = context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+            val token = sharedPreference.getString("token", "defaultValue")
+            val postData =
+                "token=" + token + "&lat=" + location.latitude + "&long=" + location.longitude
+            sendPostRequest(apiUrl, postData)
         }
 
         private fun sendPostRequest(urlString: String, postData: String) {
             val okHttpClient = OkHttpClient()
             val requestBody = postData.toRequestBody("text/plain".toMediaType())
-            Log.d("SendAlertReceiver", "" + requestBody)
             val request = Request.Builder().post(requestBody).url(urlString).build()
 
             okHttpClient.newCall(request).enqueue(object : Callback {

@@ -21,7 +21,6 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        Log.d(OnAlertReceivedService::class.java.simpleName, remoteMessage.toString())
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: " + remoteMessage.data.toString())
 
@@ -50,7 +49,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
                         TAG,
                         dis.toString()
                     )
-                    if (dis <= ALERT_RANGE_THRESHOLD) { // TODO CALL "openMaps"
+                    if (dis <= ALERT_RANGE_THRESHOLD) {
                         // it also open maps
                         showNotification("Someone is in danger! Click to locate",
                             lat.toDouble(), long.toDouble())
