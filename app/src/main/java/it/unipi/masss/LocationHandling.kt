@@ -37,7 +37,8 @@ object LocationHandling {
             }
         }
 
-        if (checkGenericPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ||
+        if (checkGenericPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) ||
+            checkGenericPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ||
             checkGenericPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             fusLocClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }

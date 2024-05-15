@@ -1,6 +1,5 @@
 package it.unipi.masss.firebase
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -13,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import it.unipi.masss.LocationHandling
+import it.unipi.masss.ProtectronApplication
 import it.unipi.masss.R
 
 
@@ -51,7 +51,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
                     )
                     if (dis <= ALERT_RANGE_THRESHOLD) {
                         // it also open maps
-                        showNotification("Someone is in danger! Click to open maps",
+                        showNotification("Someone is in danger!",
                             lat.toDouble(), long.toDouble())
                     }
                 }
@@ -71,19 +71,19 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     }
 
     // method to show a notification and open google maps to locate the victim
-    private fun showNotification(messageBody: String, lat: Double, long: Double) {
+    private fun showNotification(message: String, lat: Double, long: Double) {
         // Creates an Intent that will load the position of the victim
         val mapsIntent = Intent(Intent.ACTION_VIEW,
-            Uri.parse("geo:$lat,$long"))
+            Uri.parse("http://maps.google.com/maps?q=${lat},${long}"))
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this, 0, mapsIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val notificationBuilder = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Alert!!")
-            .setContentText(messageBody)
+            .setContentTitle(message)
+            .setContentText("Click to open Google Maps!")
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
@@ -91,20 +91,12 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Since android Oreo notification channel is needed.
-        val channel = NotificationChannel(
-            channelId,
-            "Channel human readable title",
-            NotificationManager.IMPORTANCE_DEFAULT,
-        )
-        notificationManager.createNotificationChannel(channel)
-
         val notificationId = 0
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     companion object {
         private const val TAG = "OnAlertReceivedService"
-        private const val ALERT_RANGE_THRESHOLD = 500.0 // Range in meters
+        private const val ALERT_RANGE_THRESHOLD = 100000.0 // Range in meters
     }
 }
