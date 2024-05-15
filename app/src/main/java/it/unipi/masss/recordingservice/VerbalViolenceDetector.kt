@@ -9,6 +9,8 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 
 object VerbalViolenceDetector {
+    private const val TAG = "VerbalViolenceDetector"
+    // function that executes the python script to get the features given the .wav file
     private fun extractFeatures(path: String): FloatArray {
         val py = Python.getInstance()
         val module = py.getModule("script")
@@ -18,6 +20,7 @@ object VerbalViolenceDetector {
         return result!!.toJava(FloatArray::class.java)
     }
 
+    //function to classify the .wav given the array of features
     fun classify(recordingService: RecordingService, path: String): Boolean {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(recordingService))
@@ -35,7 +38,7 @@ object VerbalViolenceDetector {
 
         model.close()
 
-        Log.d(this::class.java.simpleName, "Detection result: " + outputFeature0.contentToString())
+        Log.d(TAG, "Detection result: " + outputFeature0.contentToString())
 
         val maxIdx = outputFeature0.indices.maxBy { outputFeature0[it] }
 

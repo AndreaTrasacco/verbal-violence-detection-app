@@ -52,7 +52,7 @@ class RecordingsFragment : Fragment() {
 
         // Get an array of files in the directory
         val files = directory.listFiles()
-        Log.d("Recordings", "FILES: $files")
+        Log.d(TAG, "FILES: $files")
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
@@ -110,5 +110,9 @@ class RecordingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "RecordingsFragment"
     }
 }

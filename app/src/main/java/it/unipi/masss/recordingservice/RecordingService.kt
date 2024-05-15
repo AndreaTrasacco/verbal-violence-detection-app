@@ -30,6 +30,7 @@ class RecordingService : Service() {
 
     companion object {
         const val PERIOD: Long = 20000 // ms
+        private const val TAG = "RecordingService"
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -79,7 +80,7 @@ class RecordingService : Service() {
             }
             timer.cancel()
             if (alert) {
-                Log.d("RecordingService", "Send alert!")
+                Log.d(TAG, "Send alert!")
                 sendBroadcast(Intent(Action.SEND_ALERT.toString()))
             }
             stopSelf() // Stop foreground service
@@ -95,7 +96,7 @@ class RecordingService : Service() {
             const val AMPLITUDE_THRESHOLD: Int = 100
             const val CHECK_AMPLITUDE_SECONDS: Long = 2
             const val RECORDING_FOR_ML_SECONDS: Long = 10
-
+            private const val TAG = "RecorderTask"
         }
 
         override fun cancel(): Boolean {
@@ -114,11 +115,11 @@ class RecordingService : Service() {
             Executors.newSingleThreadScheduledExecutor().schedule(
                 {
                     val amplitude = wavRecorder?.maxAmplitudeDb!!
-                    Log.d(RecorderTask::class.java.name, "Detected amplitude: $amplitude dB")
+                    Log.d(TAG, "Detected amplitude: $amplitude dB")
                     wavRecorder?.stopRecording()
                     if (amplitude > AMPLITUDE_THRESHOLD) {
                         Log.d(
-                            this::class.java.name,
+                            TAG,
                             "Start recording for subsequent detection"
                         )
                         val outputFile = "recording_" + System.currentTimeMillis() + ".wav"

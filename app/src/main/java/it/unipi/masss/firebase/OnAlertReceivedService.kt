@@ -21,7 +21,6 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        Log.d(OnAlertReceivedService::class.java.simpleName, remoteMessage.toString())
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: " + remoteMessage.data.toString())
 
@@ -40,19 +39,19 @@ class OnAlertReceivedService : FirebaseMessagingService() {
             personInDangerLocation.longitude = long!!.toDouble()
             LocationHandling.getPreciseLocation(this).thenApply { location ->
                 if(location == null) {
-                    Log.d("DEBUG", "Cannot fetch user precise location")
+                    Log.d(TAG, "Cannot fetch user precise location")
                     return@thenApply
                 }
                 else {
-                    Log.d("DEBUG", "Location fetched $location")
+                    Log.d(TAG, "Location fetched $location")
                     val dis = location.distanceTo(personInDangerLocation)
                     Log.d(
                         TAG,
-                        dis.toString()
+                        "Distance from the victim: $dis"
                     )
-                    if (dis <= ALERT_RANGE_THRESHOLD) { // TODO CALL "openMaps"
+                    if (dis <= ALERT_RANGE_THRESHOLD) {
                         // it also open maps
-                        showNotification("Someone is in danger! Click to locate",
+                        showNotification("Someone is in danger! Click to open maps",
                             lat.toDouble(), long.toDouble())
                     }
                 }
@@ -105,7 +104,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val TAG = "FirebaseNotificationService"
+        private const val TAG = "OnAlertReceivedService"
         private const val ALERT_RANGE_THRESHOLD = 500.0 // Range in meters
     }
 }

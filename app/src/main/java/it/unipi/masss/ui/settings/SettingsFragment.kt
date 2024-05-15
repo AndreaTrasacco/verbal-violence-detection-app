@@ -54,9 +54,9 @@ class SettingsFragment : Fragment() {
         val requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
                 if (isGranted) {
-                    Log.i("Example", "Permission is granted")
+                    Log.i(TAG, "Permission is granted")
                 } else {
-                    Log.i("Example", "Permission not granted")
+                    Log.i(TAG, "Permission not granted")
                 }
             }
 
@@ -105,12 +105,12 @@ class SettingsFragment : Fragment() {
                                 editor.putString("contact_info_$id", contactInfo)
                                 editor.apply()
                             } else {
-                                Log.d("ContactPicker", "Contact info is duplicate")
+                                Log.d(TAG, "Contact info is duplicate")
                             }
                         } else {
-                            Log.d("ContactPicker", "Cursor is empty")
+                            Log.d(TAG, "Cursor is empty")
                         }
-                    } ?: Log.d("ContactPicker", "Cursor is null")
+                    } ?: Log.d(TAG, "Cursor is null")
                 }
             }
         }
@@ -156,5 +156,9 @@ class SettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "SettingsFragment"
     }
 }
