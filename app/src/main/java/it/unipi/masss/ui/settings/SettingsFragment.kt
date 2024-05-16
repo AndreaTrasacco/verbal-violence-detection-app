@@ -1,6 +1,7 @@
 package it.unipi.masss.ui.settings
 
 import SosContact
+import SosContactAdapter
 import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
@@ -20,15 +21,19 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentSettingsBinding
+import it.unipi.masss.ui.recordings.AudioItem
 
 
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+    val contactList = mutableListOf<SosContact>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +53,12 @@ class SettingsFragment : Fragment() {
         val autoMonSw = view.findViewById<SwitchMaterial>(R.id.auto_mon_sw)
         val closeContactOpt = view.findViewById<CheckBox>(R.id.close_contact_opt)
         val submitButton = view.findViewById<TextView>(R.id.submit_button)
-        val contactListLayout = view.findViewById<LinearLayout>(R.id.contactList)
-        val scrollViewLayout = view.findViewById<ScrollView>(R.id.scrollPage)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+
+        // Set the adapter for the RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val contactAdapter = SosContactAdapter(contactList)
+        recyclerView.adapter = contactAdapter
 
         val requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -60,8 +69,6 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-
-
         val sharedPreferences = requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
         val allEntries = sharedPreferences.all
 
@@ -70,7 +77,8 @@ class SettingsFragment : Fragment() {
                 val contactInfo = value as String
                 val id = key.removePrefix("contact_info_").toLong()
                 val (name, number) = contactInfo.split(",")
-                createContactTextView(id, name, number, requireContext(), contactListLayout, scrollViewLayout)
+                val contact = SosContact(requireContext(), name, number, id)
+                contactList.add(contact)
             }
         }
 
@@ -100,10 +108,14 @@ class SettingsFragment : Fragment() {
                             val existingContactInfo = sharedPreferences.getString("contact_info_$id", null)
 
                             if (existingContactInfo != contactInfo) {
-                                createContactTextView(id, name, number, requireContext(), contactListLayout, scrollViewLayout)
+                                val newContact = SosContact(requireContext(), name, number, id)
+                                contactList.add(newContact)
+                                contactAdapter.notifyItemInserted(contactList.size - 1)
+
                                 val editor = sharedPreferences.edit()
                                 editor.putString("contact_info_$id", contactInfo)
                                 editor.apply()
+
                             } else {
                                 Log.d(TAG, "Contact info is duplicate")
                             }
@@ -142,23 +154,6 @@ class SettingsFragment : Fragment() {
             settingsPreferences.setCloseContactOptionState(isChecked)
         }
     }
-
-
-    private fun createContactTextView(id: Long, name: String, number: String, context: Context, contactListLayout: LinearLayout, scrollViewLayout: ScrollView) {
-        val sosContact = SosContact(context, name, number, id)
-
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, // width
-            LinearLayout.LayoutParams.WRAP_CONTENT  // height
-        )
-        params.topMargin = 25  // set top margin here
-        sosContact.layoutParams = params
-
-        contactListLayout.addView(sosContact)
-        contactListLayout.requestLayout()
-        scrollViewLayout.requestLayout()
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

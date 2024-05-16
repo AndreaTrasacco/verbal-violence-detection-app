@@ -35,9 +35,11 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/delete_audio"
         android:src="@drawable/ic_close"
+        app:backgroundTint="@color/purple_200"
         app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:backgroundTint="@color/purple_200"/>
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/audioText"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
