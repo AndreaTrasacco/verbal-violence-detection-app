@@ -89,7 +89,7 @@ class RecordingService : Service() {
         private var isCanceled = false
 
         companion object {
-            const val AMPLITUDE_THRESHOLD: Int = 40
+            const val AMPLITUDE_THRESHOLD: Int = 55
             const val CHECK_AMPLITUDE_SECONDS: Long = 2
             const val RECORDING_FOR_ML_SECONDS: Long = 10
             private const val TAG = "RecorderTask"
@@ -128,7 +128,7 @@ class RecordingService : Service() {
                                     recordingService.filesDir.path + '/' + outputFile
                                 )
                                 if (violentRecording && !isCanceled) {
-                                    recordingService.stopRecording(true)
+                                    //recordingService.stopRecording(true)
                                 }
                                 else {
                                     val fileDelete =
