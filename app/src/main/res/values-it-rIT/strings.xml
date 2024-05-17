@@ -17,8 +17,11 @@
     <string name="open_maps">Apri Mappe</string>
     <string name="countdown"> secondi rimanenti…</string>
 
-    <string name="welcome_msg_loc">Questa app ha bisogno di accedere alla posizione in tempo reale dell\'utente per funzionare, per favore conceda il permesso e selezioni "Consenti sempre"</string>
-    <string name="welcome_msg_mic">Questa app ha bisogno di accedere al microfono, per favore conceda il permesso e selezioni "Consenti sempre"</string>
+    <string name="perm_req_msg_1">Questa app necessita di accedere alla posizione, microfono e SMS. Allo scopo di utilizzare l\'app si prega di concedere i permessi.</string>
+    <string name="perm_req_msg_2">Al fine di avvertirla di persone in pericolo attorno a lei, l\'app necessita di accedere alla posizione in background. Per favore selezioni \"Consenti sempre\".</string>
+    <string name="send_alert_confirmation_title">Conferma</string>
+    <string name="send_alert_confirmation_text">È sicuro?</string>
+
     <string name="danger_detected_notification">Sei in pericolo? Sto per inviare una richiesta di aiuto</string>
     <string name="close_app">Chiudi app</string>
     <string name="sos">SOS</string>

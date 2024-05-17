@@ -4,10 +4,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -44,45 +46,36 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkLocationPermissions()
+        askRequiredPermissions()
+    }
+
+    /**returns false if any of the permissions passed as argument is not granted, true otherwise*/
+    private fun checkRequiredPermission(permissions: Array<String>): Boolean {
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+        return true
+    }
+
+    /**check if requested permissions are granted, if not create a popup and then ask for the grant*/
+    private fun askRequiredPermissions() {
+        val permissions = mutableListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.SEND_SMS
+        )
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.FOREGROUND_SERVICE_MICROPHONE,
-                    //Manifest.permission.INTERNET,
-                    //Manifest.permission.ACCESS_NETWORK_STATE
-                ),
-                0
-            )
-            checkRecordingPermissions()
+            permissions.add(1, Manifest.permission.FOREGROUND_SERVICE_MICROPHONE)
         }
-    }
 
-    /**Checks if fine and background location permissions are granted, ask to grant them if they are not*/
-    private fun checkLocationPermissions() {
-        if(!checkGenericPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            popUp(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1, R.string.welcome_msg_loc)
+        if (!checkRequiredPermission(permissions.toTypedArray())) {
+            popUp(permissions.toTypedArray(), 1, R.string.perm_req_msg_1)
         }
-        else if (!checkGenericPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            popUp(
-                arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                2,
-                R.string.welcome_msg_loc
-            )
-        }
-    }
-
-    /**Checks if recording permissions are granted, ask to grant them if they are not*/
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    private fun checkRecordingPermissions() {
-        if (!checkGenericPermission(this, Manifest.permission.RECORD_AUDIO)) {
-            popUp(
-                arrayOf(
-                    Manifest.permission.RECORD_AUDIO,
-                ), 2, R.string.welcome_msg_mic
-            )
+        else if (!checkRequiredPermission(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION))) {
+            popUp(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), 2, R.string.perm_req_msg_2)
         }
     }
 
@@ -90,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
     }
 
-    /**shows alert dialog, if ok is pressed a permission is requested otherwise the app is closed*/
+    /**shows alert dialog, if ok is pressed a set of permissions are requested otherwise the app is closed*/
     private fun popUp(permissions: Array<String>, requestCode: Int, messageId: Int) {
         AlertDialog.Builder(this).setTitle(resources.getString(R.string.app_name))
             .setMessage(messageId).setPositiveButton("OK") { _, _ ->
@@ -105,11 +98,17 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            1, 2 -> {
+            1 -> {
                 if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     finish()
-                } else {
-                    checkLocationPermissions()
+                }
+                else {      // if each permission is granted proceed to ask the "always allow" choice for location
+                    popUp(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), 2, R.string.perm_req_msg_2)
+                }
+            }
+            2 -> {
+                if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    finish()
                 }
             }
         }

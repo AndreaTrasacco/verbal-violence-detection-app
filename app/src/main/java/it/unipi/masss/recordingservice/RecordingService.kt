@@ -128,7 +128,7 @@ class RecordingService : Service() {
                                     recordingService.filesDir.path + '/' + outputFile
                                 )
                                 if (violentRecording && !isCanceled) {
-                                    recordingService.stopRecording(true)
+                                    //recordingService.stopRecording(true)
                                 }
                                 else {
                                     val fileDelete =

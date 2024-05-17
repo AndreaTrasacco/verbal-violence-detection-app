@@ -54,7 +54,8 @@ android {
 
 chaquopy {
     defaultConfig {
-        buildPython("${System.getenv("PYTHON38_PATH")}\\python.exe")
+        //buildPython("${System.getenv("PYTHON38_PATH")}\\python.exe")
+        buildPython("C:\\Users\\kille\\AppData\\Local\\Programs\\Python\\Python311\\python.exe")
         version = "3.8"
         pip{
             install("numpy")
