@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         TopicSubscriber.subscribeToTopic(this)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onStart() {
         super.onStart()
         askRequiredPermissions()
@@ -58,12 +60,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**check if requested permissions are granted, if not create a popup and then ask for the grant*/
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun askRequiredPermissions() {
         val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.SEND_SMS,
-            Manifest.permission.WAKE_LOCK
+            Manifest.permission.WAKE_LOCK,
+            Manifest.permission.POST_NOTIFICATIONS
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
