@@ -8,7 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:baselineAligned="false">
         <RelativeLayout
             android:id="@+id/leftBar"
             android:layout_width="0dip"
@@ -22,23 +23,13 @@
             android:layout_height="match_parent"
             android:layout_weight="0.9"
             app:layout_constraintTop_toTopOf="parent">
-
-            <ScrollView
-                android:id="@+id/scrollPage"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:scrollbars="vertical"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.002">
-
-                <LinearLayout
-                    android:id="@+id/audioList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </ScrollView>
+                app:layout_constraintVertical_bias="0.002" />
         </RelativeLayout>
 
         <RelativeLayout
