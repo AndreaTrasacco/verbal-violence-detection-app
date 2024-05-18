@@ -45,7 +45,7 @@ class SosContact : ConstraintLayout {
         (parent as? ViewGroup)?.removeView(this)
 
         // Remove the corresponding contact info from SharedPreferences
-        val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove("contact_info_$contactId")
         editor.apply()
@@ -79,12 +79,6 @@ class SosContact : ConstraintLayout {
 
         this.findViewById<FloatingActionButton>(R.id.cancelButton).setOnClickListener { view ->
             this.onCancelButtonClick(view, adapter, position, contactList)
-            
-            // Remove the corresponding contact info from SharedPreferences
-            val sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.remove("contact_info_$contactId")
-            editor.apply()
         }
     }
 }

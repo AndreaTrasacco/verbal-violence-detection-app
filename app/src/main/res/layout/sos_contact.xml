@@ -29,6 +29,6 @@
         android:elevation="0dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:backgroundTint="@color/purple_800"/>
+        android:backgroundTint="@color/blue"/>
 
 </RelativeLayout>
