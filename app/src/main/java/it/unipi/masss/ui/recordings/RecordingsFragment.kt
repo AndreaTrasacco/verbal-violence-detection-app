@@ -85,6 +85,31 @@ class RecordingsFragment : Fragment() {
         recyclerView.adapter = AudioItemAdapter(audioItemList, this)
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+
+        currentlyPlaying = null
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView?.adapter?.notifyDataSetChanged()
+    }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
