@@ -50,7 +50,7 @@ class SosContact : ConstraintLayout {
 
         // Remove the item from the adapter's data set
         contactList.removeAt(position)
-        adapter.notifyItemRemoved(position)
+        adapter.notifyDataSetChanged()
     }
 
 

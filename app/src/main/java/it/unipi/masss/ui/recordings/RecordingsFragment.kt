@@ -1,6 +1,5 @@
 package it.unipi.masss.ui.recordings
 
-import AudioItemAdapter
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentRecordingsBinding
 import java.io.File
@@ -68,8 +66,6 @@ class RecordingsFragment : Fragment() {
         // Set the adapter for the RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = AudioItemAdapter(audioItemList, this)
-
-
     }
 
     override fun onDestroyView() {

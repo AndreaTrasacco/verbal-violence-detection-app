@@ -50,7 +50,6 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val settingsPreferences = SettingsPreferences(requireContext())
 
-        val autoMonSw = view.findViewById<SwitchMaterial>(R.id.auto_mon_sw)
         val closeContactOpt = view.findViewById<CheckBox>(R.id.close_contact_opt)
         val submitButton = view.findViewById<TextView>(R.id.submit_button)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
@@ -141,12 +140,6 @@ class SettingsFragment : Fragment() {
 
             val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
             contactPickerLauncher.launch(intent)
-        }
-
-        // Load state of switch and checkboxes, set listeners to trigger updates
-        autoMonSw.isChecked = settingsPreferences.getAutoMonState()
-        autoMonSw.setOnCheckedChangeListener { _, isChecked ->
-            settingsPreferences.setAutoMonState(isChecked)
         }
 
         closeContactOpt.isChecked = settingsPreferences.getCloseContactOptionState()

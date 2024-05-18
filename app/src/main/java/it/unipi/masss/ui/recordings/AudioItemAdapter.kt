@@ -1,9 +1,9 @@
+package it.unipi.masss.ui.recordings
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import it.unipi.masss.R
-import it.unipi.masss.ui.recordings.AudioItem
-import it.unipi.masss.ui.recordings.RecordingsFragment
 
 class AudioItemAdapter(
     private var audioItemList: MutableList<AudioItem>,

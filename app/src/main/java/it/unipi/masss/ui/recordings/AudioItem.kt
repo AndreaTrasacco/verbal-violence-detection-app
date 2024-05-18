@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.unipi.masss.R
 import java.io.File
 
-class AudioItem : ConstraintLayout {
+class AudioItem : RelativeLayout {
     private var textView: TextView? = null
     private var audioText: String = "text"
     private var audioId: String = "audio"
@@ -52,7 +53,7 @@ class AudioItem : ConstraintLayout {
 
         // Remove the item from the adapter's data set
         audioItemList.removeAt(position)
-        adapter.notifyItemRemoved(position)
+        adapter.notifyDataSetChanged()
     }
 
     fun onPlayButtonClick(view: View, fragment: RecordingsFragment) {
