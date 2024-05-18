@@ -1,5 +1,6 @@
 package it.unipi.masss.ui.recordings
 
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -7,9 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import it.unipi.masss.ProtectronApplication
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentRecordingsBinding
 import java.io.File
@@ -44,6 +49,18 @@ class RecordingsFragment : Fragment() {
 
         val directory = File(audioPath)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+
+        //set padding at the bottom of the setting fragment to account for the navigation bar
+        val settingsOuterLinLay = view.findViewById<LinearLayout>(R.id.recordingsOuterLinLay)
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.nav_view)
+
+        bottomNavigationView?.viewTreeObserver?.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                settingsOuterLinLay.setPadding(0,0,0, bottomNavigationView.height)
+                bottomNavigationView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
 
         // Get an array of files in the directory
         val files = directory.listFiles()

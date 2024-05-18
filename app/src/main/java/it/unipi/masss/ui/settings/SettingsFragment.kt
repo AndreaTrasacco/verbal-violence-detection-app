@@ -8,6 +8,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -20,6 +21,8 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +40,7 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     val contactList = mutableListOf<SosContact>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +61,9 @@ class SettingsFragment : Fragment() {
         val settingsOuterLinLay = view.findViewById<LinearLayout>(R.id.settingsOuterLinLay)
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.nav_view)
 
+        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        val allEntries = sharedPreferences.all
+
         bottomNavigationView?.viewTreeObserver?.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -66,36 +73,13 @@ class SettingsFragment : Fragment() {
         })
         val closeContactOpt = view.findViewById<CheckBox>(R.id.close_contact_opt)
 
-        val submitButton = view.findViewById<TextView>(R.id.submit_button)
+        val addButton = view.findViewById<TextView>(R.id.add_contact_button)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         // Set the adapter for the RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         val contactAdapter = SosContactAdapter(contactList)
         recyclerView.adapter = contactAdapter
-
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    Log.i(TAG, "Permission is granted")
-                } else {
-                    Log.i(TAG, "Permission not granted")
-
-                }
-            }
-
-        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-        val allEntries = sharedPreferences.all
-
-        for ((key, value) in allEntries) {
-            if (key.startsWith("contact_info_")) {
-                val contactInfo = value as String
-                val id = key.removePrefix("contact_info_").toLong()
-                val (name, number) = contactInfo.split(",")
-                val contact = SosContact(requireContext(), name, number, id)
-                contactList.add(contact)
-            }
-        }
 
         val contactPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -142,20 +126,39 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.i(TAG, "Permission is granted")
+                val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+                contactPickerLauncher.launch(intent)
+            } else {
+                Log.i(TAG, "Permission not granted")
+            }
+        }
+
+        for ((key, value) in allEntries) {
+            if (key.startsWith("contact_info_")) {
+                val contactInfo = value as String
+                val id = key.removePrefix("contact_info_").toLong()
+                val (name, number) = contactInfo.split(",")
+                val contact = SosContact(requireContext(), name, number, id)
+                contactList.add(contact)
+            }
+        }
+
         // Set click listener for submit button
-        submitButton.setOnClickListener {
-            // Open the contact picker
+        addButton.setOnClickListener {
             val hasPermission = ContextCompat.checkSelfPermission(
                 requireActivity(),
                 Manifest.permission.READ_CONTACTS
-            )== PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
 
             if (!hasPermission) {
                 requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            } else {
+                val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+                contactPickerLauncher.launch(intent)
             }
-
-            val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
-            contactPickerLauncher.launch(intent)
         }
 
         closeContactOpt.isChecked = settingsPreferences.getCloseContactOptionState()

@@ -63,7 +63,7 @@ class AudioItem : RelativeLayout {
             fragment.mediaPlayer?.release()
             fragment.mediaPlayer = null
 
-            val playingAudioItem = fragment.view?.findViewById<ConstraintLayout>(fragment.currentlyPlaying.hashCode())
+            val playingAudioItem = fragment.view?.findViewById<RelativeLayout>(fragment.currentlyPlaying.hashCode())
             val playingButton = playingAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
             playingButton?.setImageResource(android.R.drawable.ic_media_play)
         }
@@ -75,14 +75,14 @@ class AudioItem : RelativeLayout {
                 start()
 
                 setOnCompletionListener {
-                    val endedAudioItem = fragment.view?.findViewById<ConstraintLayout>(audioId.hashCode())
+                    val endedAudioItem = fragment.view?.findViewById<RelativeLayout>(audioId.hashCode())
                     val endedButton = endedAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
                     endedButton?.setImageResource(android.R.drawable.ic_media_play)
                     fragment.currentlyPlaying = null
                 }
             }
             fragment.currentlyPlaying = this.audioId
-            val currentAudioItem = fragment.view?.findViewById<ConstraintLayout>(audioId.hashCode())
+            val currentAudioItem = fragment.view?.findViewById<RelativeLayout>(audioId.hashCode())
             val playButton = currentAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
             playButton?.setImageResource(android.R.drawable.ic_media_pause)
         }
@@ -101,8 +101,10 @@ class AudioItem : RelativeLayout {
 
         this.id = currentAudio.audioId.hashCode()
 
+        this.setPadding(0, 10, 0, 0)
+
         if(fragment.currentlyPlaying == audioId){
-            val currentAudioItem = fragment.view?.findViewById<ConstraintLayout>(audioId.hashCode())
+            val currentAudioItem = fragment.view?.findViewById<RelativeLayout>(audioId.hashCode())
             val playButton = currentAudioItem?.findViewById<FloatingActionButton>(R.id.playButton)
             playButton?.setImageResource(android.R.drawable.ic_media_pause)
         }

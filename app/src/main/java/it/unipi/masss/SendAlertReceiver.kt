@@ -63,7 +63,7 @@ class SendAlertReceiver : BroadcastReceiver() {
 
             // build danger alert notification
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_home_black_24dp)
+                .setSmallIcon(R.drawable.icon)
                 .setContentTitle(context.getString(R.string.danger_detected_notification))
                 .setContentText(COUNTDOWN_S.toString() + " " + context.getString(R.string.countdown))
                 .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(

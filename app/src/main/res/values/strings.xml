@@ -33,4 +33,5 @@
     <string name="play_audio">playaudio</string>
     <string name="delete_audio">delete audio</string>
     <string name="removes_contact">removes contact</string>
+    <string name="add_emergency_contact">ADD EMERGENCY CONTACT</string>
 </resources>
