@@ -26,7 +26,7 @@ class OnAlertReceivedService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: " + remoteMessage.data.toString())
 
-            // check if I sent the alert
+            // check if I'm the sender of the alert
             val sharedPreference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
             if (token.equals(remoteMessage.data["token"])) return

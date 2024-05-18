@@ -27,6 +27,7 @@ object VerbalViolenceDetector {
         }
         val audioFeatures = extractFeatures(path)
         val model = AudioModel.newInstance(recordingService)
+        Log.d(TAG, "Neural network model loaded")
 
         // Creates inputs for reference.
         val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 162, 1), DataType.FLOAT32)
