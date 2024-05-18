@@ -1,4 +1,4 @@
-package it.unipi.masss
+package it.unipi.masss.firebase
 
 import android.content.Context
 import android.util.Log
