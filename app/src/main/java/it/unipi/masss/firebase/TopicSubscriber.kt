@@ -1,4 +1,4 @@
-package it.unipi.masss
+package it.unipi.masss.firebase
 
 import android.content.Context
 import android.util.Log
@@ -26,5 +26,6 @@ object TopicSubscriber {
             editor.putBoolean("subscribed", true)
             editor.apply()
         }
+        Log.d(TAG, "Already subscribed to the topic")
     }
 }

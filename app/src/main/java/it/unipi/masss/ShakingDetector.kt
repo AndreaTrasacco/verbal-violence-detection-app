@@ -13,7 +13,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import kotlin.math.abs
 
-
+/*
+* Foreground service used to detect the shaking of the smartphone, interpreted as the will of the to
+* send and emergency alert.
+* */
 class ShakingDetector : Service() {
     private lateinit var sensorEventListener: SensorEventListener
     private var numTimes: Int = 0
@@ -37,6 +40,10 @@ class ShakingDetector : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    /*
+    * The method defines a listener for the changes of the Linear Acceleration "fused" sensor. If
+    * shaking is detected a "SEND_ALERT" event is raised.
+    * */
     private fun startShakingDetection() {
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val sensorShake = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
@@ -75,7 +82,6 @@ class ShakingDetector : Service() {
             SensorManager.SENSOR_DELAY_NORMAL // 215-230 ms
         )
 
-        // TODO CODE REUSE
         // Create PendingIntent for starting MainActivity when notification is clicked
         val resultIntent = Intent(this, MainActivity::class.java)
         val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
@@ -88,14 +94,17 @@ class ShakingDetector : Service() {
         // Create the persistent notification
         val notification = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Live Monitoring")
-            .setContentText("Click to open the app")
+            .setContentTitle(getString(R.string.live_mon_title))
+            .setContentText(getString(R.string.click_to_open_app))
             .setContentIntent(resultPendingIntent)
             .setOnlyAlertOnce(true)
             .build()
         startForeground(ProtectronApplication.BG_NOTIF_ID, notification)
     }
 
+    /*
+    * The method unregisters the listener of the Linear Acceleration.
+    * */
     private fun stopShakingDetection() {
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.unregisterListener(sensorEventListener)
