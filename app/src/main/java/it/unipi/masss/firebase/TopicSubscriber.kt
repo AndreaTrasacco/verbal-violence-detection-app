@@ -26,5 +26,6 @@ object TopicSubscriber {
             editor.putBoolean("subscribed", true)
             editor.apply()
         }
+        Log.d(TAG, "Already subscribed to the topic")
     }
 }
