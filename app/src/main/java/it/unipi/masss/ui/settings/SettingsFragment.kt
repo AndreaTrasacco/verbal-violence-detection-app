@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -23,7 +24,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.switchmaterial.SwitchMaterial
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
 import it.unipi.masss.databinding.FragmentSettingsBinding
 import it.unipi.masss.ui.recordings.AudioItem
@@ -50,7 +53,19 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val settingsPreferences = SettingsPreferences(requireContext())
 
+        //set padding at the bottom of the setting fragment to account for the navigation bar
+        val settingsOuterLinLay = view.findViewById<LinearLayout>(R.id.settingsOuterLinLay)
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.nav_view)
+
+        bottomNavigationView?.viewTreeObserver?.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                settingsOuterLinLay.setPadding(0,0,0, bottomNavigationView.height)
+                bottomNavigationView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
         val closeContactOpt = view.findViewById<CheckBox>(R.id.close_contact_opt)
+
         val submitButton = view.findViewById<TextView>(R.id.submit_button)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
@@ -65,10 +80,11 @@ class SettingsFragment : Fragment() {
                     Log.i(TAG, "Permission is granted")
                 } else {
                     Log.i(TAG, "Permission not granted")
+
                 }
             }
 
-        val sharedPreferences = requireContext().getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         val allEntries = sharedPreferences.all
 
         for ((key, value) in allEntries) {

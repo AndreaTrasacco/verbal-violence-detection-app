@@ -1,25 +1,30 @@
 <resources>
-    <string name="app_name">Protectron</string>
-    <string name="title_home">Home</string>
+    <string name="app_name" translatable="false">Protectron</string>
+    <string name="title_home" translatable="false">Home</string>
     <string name="title_recordings">Recordings</string>
     <string name="title_settings">Settings</string>
     <string name="recording_service_btn_desc">Start the background service to monitor conversations</string>
 
     <string name="title_auto_mon">AUTOMATIC BACKGROUND MONITORING</string>
     <string name="auto_mon_btn">Enable automatic conversation monitoring</string>
+    <string name="live_mon_title">Live monitoring</string>
+    <string name="click_to_open_app">Click to open the app</string>
 
     <string name="title_alert_options">ALERT OPTIONS</string>
     <string name="close_contact_option">Alert people close to your location</string>
-    <string name="specific_contact_option">Alert chosen contacts</string>
-    <string name="insert_contact">Insert contact</string>
+    <string name="emergency_contact">ADD EMERGENCY CONTACT</string>
 
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancel</string>
     <string name="abort">Abort</string>
+    <string name="open_maps">Open Maps</string>
     <string name="countdown"> seconds remaining…</string>
 
-    <string name="welcome_msg_loc">This app needs to access to the user location to work, please grant the permission and select "always allow"</string>
-    <string name="welcome_msg_mic">This app needs to access to the microphone, please grant the permission and select "always allow"</string>
+    <string name="perm_req_msg_1">This app needs to access precise location, microphone and sms messages. In order to use the app, please grant every permission.</string>
+    <string name="perm_req_msg_2">In order to warn you about people in danger near to your location, the app needs to access your location in background. Please select \"Always allow\".</string>
+    <string name="send_alert_confirmation_title">Confirmation</string>
+    <string name="send_alert_confirmation_text">Are you sure?</string>
+
     <string name="danger_detected_notification">Are you in danger? Sending a request for help</string>
     <string name="close_app">Close app</string>
     <string name="sos">SOS</string>

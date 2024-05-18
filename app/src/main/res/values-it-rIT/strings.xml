@@ -1,0 +1,32 @@
+<resources>
+    <string name="title_recordings">Registrazioni</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="recording_service_btn_desc">Avvia il servizio di background per monitorare le conversazioni</string>
+
+    <string name="title_auto_mon">MONITORAGGIO AUTOMATICO IN BACKGROUND</string>
+    <string name="auto_mon_btn">Abilita il monitoraggio automatico delle conversazioni</string>
+    <string name="live_mon_title">Monitoraggio in tempo reale</string>
+    <string name="click_to_open_app">Clicca qui per aprire l\'app</string>
+
+    <string name="title_alert_options">IMPOSTAZIONI DI NOTIFICA ALLARMI</string>
+    <string name="close_contact_option">Notifica le persone nei pressi della tua posizione</string>
+    <string name="emergency_contact">AGGIUNGI CONTATTO DI EMERGENZA</string>
+
+    <string name="cancel">Rimuovi</string>
+    <string name="abort">Annulla</string>
+    <string name="open_maps">Apri Mappe</string>
+    <string name="countdown"> secondi rimanenti…</string>
+
+    <string name="perm_req_msg_1">Questa app necessita di accedere alla posizione, microfono e SMS. Allo scopo di utilizzare l\'app si prega di concedere i permessi.</string>
+    <string name="perm_req_msg_2">Al fine di avvertirla di persone in pericolo attorno a lei, l\'app necessita di accedere alla posizione in background. Per favore selezioni \"Consenti sempre\".</string>
+    <string name="send_alert_confirmation_title">Conferma</string>
+    <string name="send_alert_confirmation_text">È sicuro?</string>
+
+    <string name="danger_detected_notification">Sei in pericolo? Sto per inviare una richiesta di aiuto</string>
+    <string name="close_app">Chiudi app</string>
+    <string name="sos">SOS</string>
+    <string name="sends_manual_sos">Invia SOS manuale</string>
+    <string name="play_audio">Riproduci audio</string>
+    <string name="closeaudio">Chiudi audio</string>
+    <string name="delete_audio">Elimina audio</string>
+</resources>

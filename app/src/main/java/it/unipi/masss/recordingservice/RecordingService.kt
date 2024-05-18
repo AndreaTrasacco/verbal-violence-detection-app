@@ -29,7 +29,7 @@ class RecordingService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
     companion object {
-        const val PERIOD: Long = 20000 // ms
+        const val CHECK_AMPLITUDE_PERIOD: Long = 20000 // ms
         private const val TAG = "RecordingService"
     }
 
@@ -58,14 +58,14 @@ class RecordingService : Service() {
         // Create the persistent notification
         notificationBuilder = NotificationCompat.Builder(this, ProtectronApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Live Monitoring")
-            .setContentText("Click to open the app")
+            .setContentTitle(getString(R.string.live_mon_title))
+            .setContentText(getString(R.string.click_to_open_app))
             .setContentIntent(resultPendingIntent)
             .setOnlyAlertOnce(true)
         startForeground(ProtectronApplication.BG_NOTIF_ID, notificationBuilder.build())
         // Start the recording logic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            timer.schedule(RecorderTask(this), 0, PERIOD)
+            timer.schedule(RecorderTask(this), 0, CHECK_AMPLITUDE_PERIOD)
         }
     }
 
@@ -89,8 +89,8 @@ class RecordingService : Service() {
         private var isCanceled = false
 
         companion object {
-            const val AMPLITUDE_THRESHOLD: Int = 100
-            const val CHECK_AMPLITUDE_SECONDS: Long = 2
+            const val AMPLITUDE_DB_THRESHOLD: Int = 55 // Decibels
+            const val CHECK_AMPLITUDE_DURATION: Long = 2 // Seconds
             const val RECORDING_FOR_ML_SECONDS: Long = 10
             private const val TAG = "RecorderTask"
         }
@@ -113,7 +113,7 @@ class RecordingService : Service() {
                     val amplitude = wavRecorder?.maxAmplitudeDb!!
                     Log.d(TAG, "Detected amplitude: $amplitude dB")
                     wavRecorder?.stopRecording()
-                    if (amplitude > AMPLITUDE_THRESHOLD) {
+                    if (amplitude > AMPLITUDE_DB_THRESHOLD) {
                         Log.d(
                             TAG,
                             "Start recording for subsequent detection"
@@ -128,7 +128,7 @@ class RecordingService : Service() {
                                     recordingService.filesDir.path + '/' + outputFile
                                 )
                                 if (violentRecording && !isCanceled) {
-                                    recordingService.stopRecording(true)
+                                    //recordingService.stopRecording(true) TODO REMOVE
                                 }
                                 else {
                                     val fileDelete =
@@ -138,7 +138,7 @@ class RecordingService : Service() {
                             }, RECORDING_FOR_ML_SECONDS, TimeUnit.SECONDS
                         )
                     }
-                }, CHECK_AMPLITUDE_SECONDS, TimeUnit.SECONDS
+                }, CHECK_AMPLITUDE_DURATION, TimeUnit.SECONDS
             )
         }
     }

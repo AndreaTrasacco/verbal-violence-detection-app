@@ -52,24 +52,6 @@ class HomeFragment : Fragment() {
         val startMonBtn = view.findViewById<MaterialButton>(R.id.start_mon_btn)
         val manualSosBtn = view.findViewById<MaterialButton>(R.id.manual_sos_btn)
 
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    Log.i(TAG, "Permission is granted")
-                } else {
-                    Log.i(TAG, "Permission not granted")
-                }
-            }
-
-        val hasPermission = ContextCompat.checkSelfPermission(
-            requireActivity(),
-            Manifest.permission.SEND_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (!hasPermission) {
-            requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
-        }
-
         if (requireContext().isServiceRunning(RecordingService::class.java))
             updateButtonColor()
         else
@@ -107,9 +89,9 @@ class HomeFragment : Fragment() {
 
         manualSosBtn.setOnClickListener {
             AlertDialog.Builder(context)
-                .setTitle("Confirmation")
-                .setMessage("Are you sure?")
-                .setPositiveButton("OK") { _, _ ->
+                .setTitle(getString(R.string.send_alert_confirmation_title))
+                .setMessage(getString(R.string.send_alert_confirmation_text))
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     context?.sendBroadcast(Intent(Action.SEND_ALERT.toString()))
                 }
                 .setNegativeButton("Cancel", null)

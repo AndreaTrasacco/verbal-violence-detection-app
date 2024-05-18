@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="it.unipi.masss.ui.settings.SettingsFragment">
+
     <LinearLayout
+        android:id="@+id/settingsOuterLinLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/leftBar"
             android:layout_width="0dip"
@@ -15,6 +19,7 @@
             android:layout_weight="0.05"
             app:layout_constraintTop_toTopOf="parent">
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/middleBar"
             android:layout_width="0dip"
@@ -27,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/textView"
@@ -74,5 +80,6 @@
             android:layout_weight="0.05"
             app:layout_constraintTop_toTopOf="parent">
         </RelativeLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

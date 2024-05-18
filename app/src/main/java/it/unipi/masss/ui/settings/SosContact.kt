@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import it.unipi.masss.ProtectronApplication
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.R
 import it.unipi.masss.ui.recordings.AudioItem
 import it.unipi.masss.ui.recordings.RecordingsFragment
@@ -77,6 +79,12 @@ class SosContact : ConstraintLayout {
 
         this.findViewById<FloatingActionButton>(R.id.cancelButton).setOnClickListener { view ->
             this.onCancelButtonClick(view, adapter, position, contactList)
+            
+            // Remove the corresponding contact info from SharedPreferences
+            val sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.remove("contact_info_$contactId")
+            editor.apply()
         }
     }
 }

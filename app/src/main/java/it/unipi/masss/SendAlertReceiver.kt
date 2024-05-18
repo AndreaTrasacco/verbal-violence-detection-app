@@ -13,8 +13,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.unipi.masss.ProtectronApplication.Companion.CHANNEL_ID
 import it.unipi.masss.ProtectronApplication.Companion.COUNTDOWN_S
+import it.unipi.masss.ProtectronApplication.Companion.SHARED_PREF
 import it.unipi.masss.Util.checkGenericPermission
 import it.unipi.masss.Util.isServiceRunning
+import it.unipi.masss.location.LocationRetriever
 import it.unipi.masss.recordingservice.RecordingService
 import it.unipi.masss.ui.settings.SettingsPreferences
 import okhttp3.Call
@@ -100,7 +102,8 @@ class SendAlertReceiver : BroadcastReceiver() {
             with(NotificationManagerCompat.from(context)) {
                 cancel(1)
             }
-            LocationHandling.getPreciseLocation(context).thenApply { location ->
+
+            LocationRetriever.getPreciseLocation(context).thenApply { location ->
                 if (location == null) {
                     Log.d(TAG, "Cannot fetch user precise location")
                     return@thenApply
@@ -119,7 +122,7 @@ class SendAlertReceiver : BroadcastReceiver() {
 
             // Get all keys from SharedPreferences
             val sharedPreferences =
-                context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+                context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val allKeys = sharedPreferences.all.keys
             val contactKeys = allKeys.filter { it.startsWith("contact_info_") }
 
@@ -141,7 +144,7 @@ class SendAlertReceiver : BroadcastReceiver() {
         }
 
         private fun alertNearby(location : Location) {
-            val sharedPreference = context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE)
+            val sharedPreference = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
             val token = sharedPreference.getString("token", "defaultValue")
             val postData =
                 "token=" + token + "&lat=" + location.latitude + "&long=" + location.longitude
