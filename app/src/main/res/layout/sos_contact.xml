@@ -28,7 +28,6 @@
         android:src="@drawable/ic_close"
         android:elevation="0dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:backgroundTint="@color/blue"/>
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>
