@@ -29,4 +29,6 @@
     <string name="play_audio">Riproduci audio</string>
     <string name="closeaudio">Chiudi audio</string>
     <string name="delete_audio">Elimina audio</string>
+    <string name="removes_contact">Cancella contatto</string>
+    <string name="add_emergency_contact">AGGIUNGI CONTATTO DI EMERGENZA</string>
 </resources>
