@@ -1,2 +1,5 @@
-<h2>Requirements</h2>
+# Verbal Violence Detection and Nearby Alerting Using Smartphones
+The high number of violences, aggressions or quarrels, both in the streets and domestic environments, makes concrete the need of developing a solution to allow people to have always with them an effective tool to ask for help. For this reason, this project is focused on the design and implementation of an Android application (written in Kotlin) able to automatically detect violent situations exploiting the sound coming from the environment. For the communication among the devices and thus to let a victim to receive help from other people in the nearby, the solution adopted is the publisher subscriber pattern offered by Firebase Cloud Messaging. This mechanism is exploited by adding a server listening for alert messages containing the victim position; the server then publishes the received alert to the other application users. In addition, using the new APIs and mechanisms offered by the Android OS, and taking care of the user interaction, this application is capable to obtain a light, energy-efficient and accessible solution to the “problem of violences”.
+
+### Requirements
 - Add new environment variable called PYTHON38_PATH containing the path to the directory of python executable (python version >= 3.8)
